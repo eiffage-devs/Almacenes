@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/negroBootstrap"
+    android:orientation="vertical"
+    tools:context=".Activities.General.OTOIncidencia">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="¿La obra es una OT o una incidencia?"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="36sp" />
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <RadioButton
+            android:id="@+id/optOT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="OT"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <RadioButton
+            android:id="@+id/optIncidencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="Incidencia"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/incidencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:hint="Introduce el nº de incidencia"
+        android:inputType="text"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/ticketSCM"
+        android:layout_width="404dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rg"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:hint="Ticket SCM"
+        android:inputType="number"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="24sp"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/btnOTIncidencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/azulBootstrap"
+        android:onClick="continuar"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="Buscar OT"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+
+</LinearLayout>

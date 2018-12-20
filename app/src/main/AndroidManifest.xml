@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.eiffage.almacenes">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logoapp"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logoapp"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.eiffage.almacenes"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity android:name=".Activities.General.Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.General.Menu"
+            android:configChanges="keyboard|keyboardHidden|screenSize|screenLayout|uiMode" />
+        <activity
+            android:name=".Activities.General.Configuracion"
+            android:configChanges="keyboard|keyboardHidden|screenSize|screenLayout|uiMode" />
+        <activity android:name=".Activities.Almacen.OpcionesAlmacenero" />
+        <activity android:name=".Activities.Almacen.TiposRegistro.Entrada" />
+        <activity android:name=".Activities.Almacen.TiposRegistro.SalidaAlmacen" />
+        <activity
+            android:name=".Activities.Almacen.TiposRegistro.SalidaObra"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode" />
+        <activity
+            android:name=".Activities.Almacen.TiposRegistro.DevObra"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode" />
+        <activity
+            android:name=".Activities.Almacen.CreaLineas"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".Activities.Almacen.ScannerActivity" />
+        <activity android:name=".Activities.General.OTOIncidencia" />
+        <activity android:name=".Activities.JefeObra.OpcionesJefeObra" />
+        <activity android:name=".Activities.JefeObra.FiltroOT" />
+        <activity
+            android:name=".Activities.Almacen.InfoLote"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode" />
+        <activity android:name=".Activities.General.PantallaCompleta" />
+        <activity android:name=".Activities.TrazabilidadLote.Trazabilidad"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"></activity>
+    </application>
+
+</manifest>

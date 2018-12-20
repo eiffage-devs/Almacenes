@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/negroBootstrap">
+
+    <ImageView
+        android:id="@+id/imagenItemFoto"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_marginTop="30dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/logoapp" />
+
+    <Button
+        android:id="@+id/botonBorrarItemFoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imagenItemFoto"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="2dp"
+        android:background="#f00"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:text="Borrar foto"
+        android:textColor="@android:color/white" />
+
+
+</RelativeLayout>

@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Almacen.InfoLote"
+    android:background="@color/negroBootstrap">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/labelTipoLote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:text="Tipo de lote"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white">
+
+            <Spinner
+                android:id="@+id/tipoLote"
+                style="@style/Widget.AppCompat.Light.DropDownItem.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/relative1">
+
+            <TextView
+                android:id="@+id/labelNumSerie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:text="Producto"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/numSerie"
+                android:layout_width="253dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@+id/labelNumSerie"
+                android:text="1234567890"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/labelMarca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relative1"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Marca"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/marca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelMarca"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: Ormazabal"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/labelPotencia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/marca"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Potencia (KVA)"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/potencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelPotencia"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: 17.5"
+            android:inputType="number|numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/labelTensionAT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/marca"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Tensión AT (Kv)"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/tensionAT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelPotencia"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: 10.3"
+            android:inputType="number|numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/labelTensionBT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/marca"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Tensión BT (V.)"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/tensionBT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelPotencia"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: 300"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/labelPeso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/marca"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Peso (KG)"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/peso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelPotencia"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: 19"
+            android:inputType="number|numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/labelAño"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/marca"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Año fabricación"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/año"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelPotencia"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: 2016"
+            android:inputType="number|numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/labelIntensidadNominal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/marca"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Intensidad nominal (A)"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/intensidadNominal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelPotencia"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: 2016"
+            android:inputType="number|numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/labelIntensidadCortocircuito"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/marca"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Intensidad cortocircuito (KA)"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/intensidadCortocircuito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelPotencia"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: 2016"
+            android:inputType="number|numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/labelTipoLlenado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:text="Tipo llenado"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/relative2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white">
+
+            <Spinner
+                android:id="@+id/tipoLlenado"
+                style="@style/Widget.AppCompat.Light.DropDownItem.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/labelPasatapas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:text="Pasatapas"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/relative3"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white">
+
+            <Spinner
+                android:id="@+id/pasaTapas"
+                style="@style/Widget.AppCompat.Light.DropDownItem.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/labelSeguimiento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:text="Seguimiento:"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/relative4"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white">
+
+            <Spinner
+                android:id="@+id/seguimiento"
+                style="@style/Widget.AppCompat.Light.DropDownItem.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/labelObservaciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tensionAT"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Observaciones"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/observaciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/labelObservaciones"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/whiteborder"
+            android:gravity="top|start"
+            android:hint="Ejemplo: Observaciones de ejemplo"
+            android:lines="2"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:id="@+id/l1">
+
+            <com.eiffage.almacenes.Activities.General.ExpandableHeightListView
+                android:id="@+id/listaFotos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="20dp"
+                android:divider="@color/negroBootstrap"
+                android:isScrollContainer="false"
+                android:scrollbars="none"
+                android:layout_margin="20dp" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/hacerFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/l1"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@color/azulBootstrap"
+            android:drawableTop="@android:drawable/ic_menu_camera"
+            android:onClick="añadirFoto"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:text="Añadir foto"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/validarInfoLote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hacerFoto"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/azulBootstrap"
+            android:onClick="enviarDatosLote"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:text="Confirmar información de lote"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+</ScrollView>

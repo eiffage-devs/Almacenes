@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Eiffage Energía Almacenes</string>
+    <string name="urlBase">http://82.223.65.75:8000/</string>
+    <string name="urlLogin">api_user/autenticar.json</string>
+    <string name="urlCheck">api_check_user/check_token.json</string>
+
+    <array name="almacenes">
+        <item>PDI Linares</item>
+        <item>PDI Almería</item>
+        <item>PDI Lanzarote</item>
+        <item>PDI Fuerteventura</item>
+        <item>Almacén Jaén</item>
+        <item>Almacén Villacarrillo</item>
+        <item>Almacén Vera</item>
+        <item>Almacén Poniente</item>
+        <item>Almacén Andújar</item>
+    </array>
+
+    <array name="tipoLote">
+        <item>Bobina</item>
+        <item>Celda</item>
+        <item>Trafo</item>
+    </array>
+
+    <array name="seguimientoCelda">
+        <item>PDI</item>
+        <item>Reutilizable</item>
+        <item>Averiado</item>
+        <item>Chatarra</item>
+    </array>
+
+    <array name="seguimientoTrafo">
+        <item>PDI</item>
+        <item>Reutilizable</item>
+        <item>Averiado</item>
+        <item>Chatarra</item>
+        <item>Contaminado</item>
+    </array>
+
+    <array name="tipoLlenado">
+        <item>Integral</item>
+        <item>Depósito expansión</item>
+        <item>Hermético</item>
+    </array>
+
+    <array name="pasatapas">
+        <item>Abierto</item>
+        <item>Enchufable</item>
+    </array>
+
+    <string name="title_activity_pantalla_completa2">PantallaCompleta2</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+</resources>

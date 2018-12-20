@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/negroBootstrap"
+    tools:context=".Activities.Almacen.TiposRegistro.SalidaAlmacen">
+
+    <TextView
+        android:id="@+id/tituloSalidaAlmaccen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Tipo de registro:\nSALIDA A ALMACÉN"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
+
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@id/tituloSalidaAlmaccen"
+        android:layout_margin="20dp"
+        android:background="@android:color/white">
+
+        <Spinner
+            android:id="@+id/spinnerAlmacenDestino"
+            style="@style/Widget.AppCompat.Light.DropDownItem.Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp" />
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/salidaAlmacenSiguiente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/azulBootstrap"
+        android:onClick="siguiente"
+        android:text="Siguiente"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>
