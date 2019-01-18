@@ -451,14 +451,33 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/validarInfoLote"
+            android:id="@+id/btnAñadirFotoDesdeGaleria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/hacerFoto"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:background="@color/azulBootstrap"
+            android:drawableTop="@android:drawable/ic_menu_gallery"
+            android:onClick="añadirFotoDesdeGaleria"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:text="Añadir foto desde galería"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/validarInfoLote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnAñadirFotoDesdeGaleria"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/holo_red_dark"
             android:onClick="enviarDatosLote"
             android:paddingBottom="3dp"
             android:paddingLeft="10dp"

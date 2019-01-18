@@ -1,26 +1,36 @@
 package com.eiffage.almacenes.Activities.TrazabilidadLote;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,7 +41,6 @@ import com.eiffage.almacenes.Activities.Almacen.CreaLineas;
 import com.eiffage.almacenes.Activities.Almacen.ScannerActivity;
 import com.eiffage.almacenes.Activities.General.ExpandableHeightListView;
 import com.eiffage.almacenes.Adapters.FotosCargadasAdapter;
-import com.eiffage.almacenes.Adapters.LineasAdapter;
 import com.eiffage.almacenes.Adapters.ListaFotosAdapter;
 import com.eiffage.almacenes.Adapters.MovimientosAdapter;
 import com.eiffage.almacenes.Objetos.Movimiento;
@@ -41,17 +50,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Trazabilidad extends AppCompatActivity {
 
     EditText lote;
-
+    Button añadirFoto;
     ProgressDialog progressDialog;
 
-    String buscarLote, token;
+    String buscarLote, token, mCurrentPhotoPath;
 
     String URL_Movimientos_Lote = "http://82.223.65.75:8000/api_endesa/obtenerInfoLote";
     String URL_Trazabilidad_Lote = "http://82.223.65.75:8000/api_endesa/obtenerMovimientosLote";
@@ -68,7 +84,7 @@ public class Trazabilidad extends AppCompatActivity {
 
     //Celda
     TextView celdaNumSerie, celdaTipoLote, celdaProducto, celdaMarca, celdaTensionAT, celdaINominal, celdaICortocircuito,
-    celdaSeguimiento, celdaObservaciones;
+            celdaSeguimiento, celdaObservaciones;
 
     //Trafo
     TextView trafoNumSerie, trafoTipoLote, trafoProducto, trafoMarca, trafoPotencia, trafoTensionAT, trafoTensionBT, trafoPeso,
@@ -78,7 +94,7 @@ public class Trazabilidad extends AppCompatActivity {
     //      Método para usar flecha de atrás en Action Bar
     //
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
@@ -134,9 +150,21 @@ public class Trazabilidad extends AppCompatActivity {
         trafoObservaciones = findViewById(R.id.trafoObservaciones);
 
         movimientos = new ArrayList<>();
+        añadirFoto = findViewById(R.id.btnAñadirFoto);
+
+
+        //
+        //      Pedir permisos de cámara para poder escanear
+        //
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(Trazabilidad.this, new String[]{Manifest.permission.CAMERA}, 0);
+
+        }
     }
 
-    public void traerInfoLote(View view){
+    public void traerInfoLote(View view) {
         muestraLoader("Cargando información del lote...");
         buscarLote = lote.getText().toString();
 
@@ -153,7 +181,7 @@ public class Trazabilidad extends AppCompatActivity {
                             JSONArray js = new JSONArray(jsonArray);
                             JSONObject jsonObject1 = js.getJSONObject(0);
 
-                            switch (jsonObject1.getString("tipoLote")){
+                            switch (jsonObject1.getString("tipoLote")) {
                                 case "Trafo":
                                     cargarTrafo(jsonObject1);
                                     break;
@@ -167,8 +195,7 @@ public class Trazabilidad extends AppCompatActivity {
                             muestraLoader("Cargando trazabilidad del lote...");
                             traerTrazabilidadLote();
 
-                        }
-                        catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
@@ -205,19 +232,18 @@ public class Trazabilidad extends AppCompatActivity {
     //
     //  Cargar BOBINA
     //
-    public void cargarBobina(JSONObject response){
+    public void cargarBobina(JSONObject response) {
         containerBobina.setVisibility(View.VISIBLE);
         containerCelda.setVisibility(View.GONE);
         containerTrafo.setVisibility(View.GONE);
-        try{
+        try {
             bobinaNumSerie.setText("Lote: " + response.getString("numSerie"));
             bobinaTipoLote.setText(response.getString("tipoLote"));
             bobinaProducto.setText(response.getString("numProd"));
             bobinaMarca.setText(response.getString("marca"));
             bobinaObservaciones.setText(response.getString("observaciones"));
 
-        }
-        catch (JSONException e){
+        } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -225,13 +251,13 @@ public class Trazabilidad extends AppCompatActivity {
     //
     //  Cargar CELDA
     //
-    public void cargarCelda(JSONObject response){
+    public void cargarCelda(JSONObject response) {
 
         containerBobina.setVisibility(View.GONE);
         containerCelda.setVisibility(View.VISIBLE);
         containerTrafo.setVisibility(View.GONE);
 
-        try{
+        try {
             celdaNumSerie.setText("Lote: " + response.getString("numSerie"));
             celdaTipoLote.setText(response.getString("tipoLote"));
             celdaProducto.setText(response.getString("numProd"));
@@ -241,8 +267,7 @@ public class Trazabilidad extends AppCompatActivity {
             celdaICortocircuito.setText(response.getString("intensidadCortocircuito"));
             celdaSeguimiento.setText(response.getString("seguimiento"));
             celdaObservaciones.setText(response.getString("observaciones"));
-        }
-        catch (JSONException e){
+        } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -250,12 +275,12 @@ public class Trazabilidad extends AppCompatActivity {
     //
     //  Cargar TRAFO
     //
-    public void cargarTrafo(JSONObject response){
+    public void cargarTrafo(JSONObject response) {
         containerBobina.setVisibility(View.GONE);
         containerCelda.setVisibility(View.GONE);
         containerTrafo.setVisibility(View.VISIBLE);
 
-        try{
+        try {
             trafoNumSerie.setText("Lote: " + response.getString("numSerie"));
             trafoTipoLote.setText(response.getString("tipoLote"));
             trafoProducto.setText(response.getString("numProd"));
@@ -270,13 +295,12 @@ public class Trazabilidad extends AppCompatActivity {
             trafoSeguimiento.setText(response.getString("seguimiento"));
             trafoObservaciones.setText(response.getString("observaciones"));
 
-        }
-        catch (JSONException e){
+        } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void traerTrazabilidadLote(){
+    public void traerTrazabilidadLote() {
         movimientos = new ArrayList<>();
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Trazabilidad_Lote,
@@ -286,15 +310,14 @@ public class Trazabilidad extends AppCompatActivity {
                         try {
                             JSONObject jo = new JSONObject(response);
                             JSONArray jsonArray = jo.getJSONArray("content");
-                            if(jsonArray.length() == 0){
+                            if (jsonArray.length() == 0) {
                                 Toast.makeText(getApplicationContext(), "No hay registros", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                for(int i = 0; i < jsonArray.length(); i++){
+                            } else {
+                                for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                                     String tipoMov = jsonObject1.getString("tipoMov");
-                                    if(tipoMov.equals("Devolución_a_Endesa")){
+                                    if (tipoMov.equals("Devolución_a_Endesa")) {
                                         tipoMov = "Devolución\nEndesa";
                                     }
                                     String fecha = jsonObject1.getString("fecha");
@@ -314,8 +337,7 @@ public class Trazabilidad extends AppCompatActivity {
                             muestraLoader("Cargando fotos del lote...");
                             traerFotosLote();
 
-                        }
-                        catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
@@ -350,7 +372,7 @@ public class Trazabilidad extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    public void traerFotosLote(){
+    public void traerFotosLote() {
         final ArrayList<String> urlFotos = new ArrayList<>();
         final ExpandableHeightListView listaFotos = findViewById(R.id.listaFotosLote);
 
@@ -365,11 +387,10 @@ public class Trazabilidad extends AppCompatActivity {
                             JSONObject jo = new JSONObject(response);
 
                             JSONArray jsonArray = jo.getJSONArray("content");
-                            if(jsonArray.length() == 0){
+                            if (jsonArray.length() == 0) {
                                 Toast.makeText(getApplicationContext(), "No hay fotos", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                for(int i = 0; i < jsonArray.length(); i++){
+                            } else {
+                                for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                                     String rutaSim = jsonObject1.getString("rutaSim");
@@ -377,8 +398,7 @@ public class Trazabilidad extends AppCompatActivity {
                                     urlFotos.add(rutaSim);
                                 }
                                 FotosCargadasAdapter adapterFotos = new FotosCargadasAdapter(Trazabilidad.this, urlFotos);
-                                //ExpandableHeightListView listaFotos = findViewById(R.id.listaFotosLote);
-                                ArrayList<Bitmap> asdf = new ArrayList<>();
+
 
                                 listaFotos.setAdapter(adapterFotos);
                                 listaFotos.setScrollContainer(false);
@@ -391,11 +411,11 @@ public class Trazabilidad extends AppCompatActivity {
                                         return false;
                                     }
                                 });
+
                             }
 
                             progressDialog.dismiss();
-                        }
-                        catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
@@ -435,7 +455,7 @@ public class Trazabilidad extends AppCompatActivity {
     //
     //      Botón de escanear
     //
-    public void escanear(View view){
+    public void escanear(View view) {
         Intent i = new Intent(Trazabilidad.this, ScannerActivity.class);
         startActivityForResult(i, 0);
     }
@@ -445,13 +465,106 @@ public class Trazabilidad extends AppCompatActivity {
         //
         //      Escáner
         //
-        if(requestCode == 0){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == 0) {
+            if (resultCode == Activity.RESULT_OK) {
                 lote.setText(data.getStringExtra("codigo"));
-            }
-            else if(resultCode == Activity.RESULT_CANCELED){
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "No se ha capturado ningún código de lote", Toast.LENGTH_SHORT).show();
             }
+        }
+        //  ------------------------------------
+        //              TEMPORAL
+        //  ------------------------------------
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Bitmap nuevaFoto;
+
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+
+                // Decode the image file into a Bitmap sized to fill the View
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inPurgeable = true;
+
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+
+                Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+
+                if (photoW < photoH) {
+                    Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 893, 1263, true);
+                    Matrix matrix = new Matrix();
+
+                    matrix.postRotate(180);
+                    nuevaFoto = Bitmap.createBitmap(bitmap1, 0, 0, bitmap1.getWidth(), bitmap1.getHeight(), matrix, true);
+
+                    bitmap.recycle();
+                    bitmap1.recycle();
+                } else {
+                    Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 1263, 893, true);
+                    Matrix matrix = new Matrix();
+
+                    matrix.postRotate(90);
+                    nuevaFoto = Bitmap.createBitmap(bitmap1, 0, 0, bitmap1.getWidth(), bitmap1.getHeight(), matrix, true);
+
+                    bitmap.recycle();
+                    bitmap1.recycle();
+                }
+
+                enviarFoto(nuevaFoto);
+            }
+        }
+
+        if(requestCode == 2){
+            if(resultCode == RESULT_OK){
+                try {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+
+                    Bitmap nuevaFoto;
+
+                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                    bmOptions.inJustDecodeBounds = true;
+
+                    // Decode the image file into a Bitmap sized to fill the View
+                    bmOptions.inJustDecodeBounds = false;
+                    bmOptions.inPurgeable = true;
+
+                    int photoW = bmOptions.outWidth;
+                    int photoH = bmOptions.outHeight;
+
+                    Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+
+                    if (photoW < photoH) {
+                        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 893, 1263, true);
+                        Matrix matrix = new Matrix();
+
+                        matrix.postRotate(180);
+                        nuevaFoto = Bitmap.createBitmap(bitmap1, 0, 0, bitmap1.getWidth(), bitmap1.getHeight(), matrix, true);
+
+                        bitmap.recycle();
+                        bitmap1.recycle();
+                    } else {
+                        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 1263, 893, true);
+                        Matrix matrix = new Matrix();
+
+                        matrix.postRotate(90);
+                        nuevaFoto = Bitmap.createBitmap(bitmap1, 0, 0, bitmap1.getWidth(), bitmap1.getHeight(), matrix, true);
+
+                        bitmap.recycle();
+                        bitmap1.recycle();
+                    }
+                    enviarFoto(nuevaFoto);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Trazabilidad.this, "No se puede enviar la foto", Toast.LENGTH_LONG).show();
+                }
+            }
+            else {
+                Toast.makeText(Trazabilidad.this, "No se ha seleccionado ninguna foto", Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 
@@ -466,9 +579,111 @@ public class Trazabilidad extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void muestraLoader(String mensaje){
+    public void muestraLoader(String mensaje) {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(mensaje);
         progressDialog.show();
     }
+
+    //  -----------------------------------------------------
+    //  -----------------------------------------------------
+    //  FUNCIÓN TEMPORAL --> AÑADIR FOTOS A LOTE YA EXISTENTE
+    //  -----------------------------------------------------
+    //  -----------------------------------------------------
+
+    public void añadirFoto(View view) {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(Trazabilidad.this,
+                        "com.eiffage.almacenes",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, 1);
+            }
+        }
+    }
+
+    public void añadirFotoDesdeGaleria(View view) {
+
+        Intent getPictureIntent = new Intent(Intent.ACTION_PICK);
+        getPictureIntent.setType("image/");
+        startActivityForResult(getPictureIntent, 2);
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    public void enviarFoto(Bitmap bitmap) {
+        muestraLoader("Enviando fotos...");
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        byte[] byteArray = stream.toByteArray();
+        final String encodedImage = "holapaco, " + Base64.encodeToString(byteArray, Base64.DEFAULT);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/creaFoto",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        Log.d("Envio foto", response);
+                        traerTrazabilidadLote();
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Log.d(" ERROR RESPONSE", error.toString());
+                Toast.makeText(getApplicationContext(), "Error envio foto: " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "Bearer " + token);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("lote", buscarLote);
+                params.put("foto", encodedImage);
+
+                return params;
+            }
+        };
+        stringRequest.setTag("ENVIO_FOTOS");
+        stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+
+        queue.add(stringRequest);
+    }
 }
+

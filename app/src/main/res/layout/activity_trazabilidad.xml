@@ -902,6 +902,40 @@
             android:layout_below="@id/textView18"
             android:paddingBottom="50dp" />
 
+        <Button
+            android:id="@+id/btnAñadirFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listaFotosLote"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@color/azulBootstrap"
+            android:drawableTop="@android:drawable/ic_menu_camera"
+            android:onClick="añadirFoto"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:text="Añadir foto"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnAñadirFotoDesdeGaleria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnAñadirFoto"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@color/azulBootstrap"
+            android:drawableTop="@android:drawable/ic_menu_gallery"
+            android:onClick="añadirFotoDesdeGaleria"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:text="Añadir foto desde galería"
+            android:textColor="@android:color/white" />
+
 
     </RelativeLayout>
 

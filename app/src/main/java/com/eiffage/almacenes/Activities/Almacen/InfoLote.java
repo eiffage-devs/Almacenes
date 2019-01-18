@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.icu.text.IDNA;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -41,6 +42,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.eiffage.almacenes.Activities.General.Configuracion;
 import com.eiffage.almacenes.Activities.General.ExpandableHeightListView;
+import com.eiffage.almacenes.Activities.TrazabilidadLote.Trazabilidad;
 import com.eiffage.almacenes.Adapters.ListaFotosAdapter;
 import com.eiffage.almacenes.R;
 
@@ -49,7 +51,9 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -619,70 +623,79 @@ public class InfoLote extends AppCompatActivity {
     }
 
     public void enviarFotos(){
-        muestraLoader("Enviando fotos...");
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        for(int i = 0; i < fotos.size(); i++){
-            final int j = i;
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            fotos.get(i).compress(Bitmap.CompressFormat.JPEG, 50, stream);
-            byte[] byteArray = stream.toByteArray();
-            final String encodedImage = "holapaco, " + Base64.encodeToString(byteArray, Base64.DEFAULT);
+        if(fotos.size() > 0){
+            muestraLoader("Enviando fotos...");
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            for(int i = 0; i < fotos.size(); i++){
+                final int j = i;
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                fotos.get(i).compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                byte[] byteArray = stream.toByteArray();
+                final String encodedImage = "holapaco, " + Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/creaFoto",
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            progressDialog.dismiss();
-                            if(j == fotos.size() -1){
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/creaFoto",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
                                 progressDialog.dismiss();
-                                int posLote = response.indexOf("NumLote") + 12;
-                                int posId = response.indexOf("IdFoto") -7;
-                                try {
-                                    Toast.makeText(getApplicationContext(), "Lote " + response.substring(posLote, posId) + " validado", Toast.LENGTH_SHORT).show();
-                                    Log.d("Toast", "Lote " + response.substring(posLote, posId) + " validado");
-                                    Intent returnIntent = new Intent(InfoLote.this, CreaLineas.class);
-                                    setResult(Activity.RESULT_OK,returnIntent);
-                                    finish();
+                                if(j == fotos.size() -1){
+                                    progressDialog.dismiss();
+                                    int posLote = response.indexOf("NumLote") + 12;
+                                    int posId = response.indexOf("IdFoto") -7;
+                                    try {
+                                        Toast.makeText(getApplicationContext(), "Lote " + response.substring(posLote, posId) + " validado", Toast.LENGTH_SHORT).show();
+                                        Log.d("Toast", "Lote " + response.substring(posLote, posId) + " validado");
+                                        Intent returnIntent = new Intent(InfoLote.this, CreaLineas.class);
+                                        setResult(Activity.RESULT_OK,returnIntent);
+                                        finish();
+                                    }
+                                    catch (Exception e){
+                                        Toast.makeText(getApplicationContext(), "Fallo al enviar la información: " + response, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                                catch (Exception e){
-                                    Toast.makeText(getApplicationContext(), "Fallo al enviar la información: " + response, Toast.LENGTH_SHORT).show();
-                                }
+                                Log.d("RESPONSE", response);
+
+
                             }
-                            Log.d("RESPONSE", response);
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Log.d(" ERROR RESPONSE", error.toString());
+                        Toast.makeText(getApplicationContext(), "Error envio fotos: " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("Content-Type", "application/json");
+                        params.put("Authorization", "Bearer " + token);
 
+                        return params;
+                    }
 
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    progressDialog.dismiss();
-                    Log.d(" ERROR RESPONSE", error.toString());
-                    Toast.makeText(getApplicationContext(), "Error envio fotos: " + error.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("Content-Type", "application/json");
-                    params.put("Authorization", "Bearer " + token);
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("lote", cod_lote);
+                        params.put("foto", encodedImage);
 
-                    return params;
-                }
+                        return params;
+                    }
+                };
+                stringRequest.setTag("ENVIO_FOTOS");
+                stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
 
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("lote", cod_lote);
-                    params.put("foto", encodedImage);
-
-                    return params;
-                }
-            };
-            stringRequest.setTag("ENVIO_FOTOS");
-            stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
-
-            queue.add(stringRequest);
+                queue.add(stringRequest);
+            }
         }
+        else {
+            Toast.makeText(InfoLote.this, "Se ha validado el lote, pero no se han adjuntado fotos.", Toast.LENGTH_SHORT).show();
+            Intent returnIntent = new Intent(InfoLote.this, CreaLineas.class);
+            setResult(Activity.RESULT_OK,returnIntent);
+            finish();
+        }
+
     }
 
     public void añadirFoto(View view){
@@ -706,6 +719,13 @@ public class InfoLote extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, 0);
             }
         }
+    }
+
+    public void añadirFotoDesdeGaleria(View view) {
+
+        Intent getPictureIntent = new Intent(Intent.ACTION_PICK);
+        getPictureIntent.setType("image/");
+        startActivityForResult(getPictureIntent, 1);
     }
 
     //
@@ -754,6 +774,59 @@ public class InfoLote extends AppCompatActivity {
                 urlFotos.add(mCurrentPhotoPath);
                 listaFotosAdapter = new ListaFotosAdapter(this, fotos, urlFotos);
                 listaFotos.setAdapter(listaFotosAdapter);
+            }
+        }
+        if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                try {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+
+                    Bitmap nuevaFoto;
+
+                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                    bmOptions.inJustDecodeBounds = true;
+
+                    // Decode the image file into a Bitmap sized to fill the View
+                    bmOptions.inJustDecodeBounds = false;
+                    bmOptions.inPurgeable = true;
+
+                    int photoW = bmOptions.outWidth;
+                    int photoH = bmOptions.outHeight;
+
+                    Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+
+                    if (photoW < photoH) {
+                        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 893, 1263, true);
+                        Matrix matrix = new Matrix();
+
+                        matrix.postRotate(180);
+                        nuevaFoto = Bitmap.createBitmap(bitmap1, 0, 0, bitmap1.getWidth(), bitmap1.getHeight(), matrix, true);
+
+                        bitmap.recycle();
+                        bitmap1.recycle();
+                    } else {
+                        Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 1263, 893, true);
+                        Matrix matrix = new Matrix();
+
+                        matrix.postRotate(90);
+                        nuevaFoto = Bitmap.createBitmap(bitmap1, 0, 0, bitmap1.getWidth(), bitmap1.getHeight(), matrix, true);
+
+                        bitmap.recycle();
+                        bitmap1.recycle();
+                    }
+                    fotos.add(nuevaFoto);
+                    urlFotos.add(mCurrentPhotoPath);
+                    listaFotosAdapter = new ListaFotosAdapter(this, fotos, urlFotos);
+                    listaFotos.setAdapter(listaFotosAdapter);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Toast.makeText(InfoLote.this, "No se puede enviar la foto", Toast.LENGTH_LONG).show();
+                }
+            }
+            else {
+                Toast.makeText(InfoLote.this, "No se ha seleccionado ninguna foto", Toast.LENGTH_LONG).show();
             }
         }
     }

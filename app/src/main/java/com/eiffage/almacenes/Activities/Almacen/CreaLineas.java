@@ -349,8 +349,9 @@ public class CreaLineas extends AppCompatActivity {
             nuevaLinea.setEnabled(true);
         }
         else {
-
+            nuevaLinea.setEnabled(true);
             necesitaLote(true);
+
         }
     }
 
@@ -373,7 +374,7 @@ public class CreaLineas extends AppCompatActivity {
                                 //
                                 //      Mostrar botón Info Lote si no se ve ya
                                 //
-                                if(tipoRegistro.equals("ENTRADA")){
+                                if(tipoRegistro.equals("ENTRADA") && !infoLoteValidada){
                                     if(superior3.getVisibility() == View.GONE){
                                         superior3.setVisibility(View.VISIBLE);
                                     }
