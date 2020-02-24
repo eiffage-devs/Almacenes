@@ -46,6 +46,8 @@ import java.util.Map;
 
 public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
+    private final String URL_FILTROS_ALMACEN = this.getResources().getString(R.string.urlFiltrosAlmacen);
+
     SharedPreferences myPrefs;
     String token;
     OTAdapter otAdapter;
@@ -164,7 +166,7 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
 
     public void obtenerListado(final String almacen) {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/filtrosAlmacen",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_FILTROS_ALMACEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -202,7 +204,7 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
             }
         };
         queue.add(stringRequest);
-        stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+        stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
     }
 
 
@@ -260,19 +262,13 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String codOT = otManual.getText().toString();
-                if(codOT.length() != 6) {
-                    Toast.makeText(getApplicationContext(), "El código de la OT debe tener 6 caracteres.", Toast.LENGTH_SHORT).show();
-                    codOT = "";
-                }
-                else {
-                    Intent intent = new Intent(SalidaObra.this, CreaLineas.class);
-                    intent.putExtra("tipoRegistro", tipoRegistro);
-                    intent.putExtra("otElegida", codOT);
-                    intent.putExtra("incidenciaElegida", "-");
-                    intent.putExtra("ticketSCM", ticketSCM);
-                    startActivity(intent);
-                }
 
+                Intent intent = new Intent(SalidaObra.this, CreaLineas.class);
+                intent.putExtra("tipoRegistro", tipoRegistro);
+                intent.putExtra("otElegida", codOT);
+                intent.putExtra("incidenciaElegida", "-");
+                intent.putExtra("ticketSCM", ticketSCM);
+                startActivity(intent);
             }
         })
 

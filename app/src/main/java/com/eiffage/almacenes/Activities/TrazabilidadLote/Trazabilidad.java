@@ -63,15 +63,15 @@ import java.util.Map;
 
 public class Trazabilidad extends AppCompatActivity {
 
+    private final String URL_INFO_LOTE = this.getResources().getString(R.string.urlObtenerInfoLote);
+    private final String URL_TRAZABILIDAD_LOTE =  this.getResources().getString(R.string.urlObtenerMovimientosLote);
+    private final String URL_FOTOS_LOTE = this.getResources().getString(R.string.urlObtenerFotosLote);
+
     EditText lote;
     Button añadirFoto;
     ProgressDialog progressDialog;
 
     String buscarLote, token, mCurrentPhotoPath;
-
-    String URL_Movimientos_Lote = "http://82.223.65.75:8000/api_endesa/obtenerInfoLote";
-    String URL_Trazabilidad_Lote = "http://82.223.65.75:8000/api_endesa/obtenerMovimientosLote";
-    String URL_Fotos_Lote = "http://82.223.65.75:8000/api_endesa/obtenerFotosLote";
 
     LinearLayout containerBobina, containerCelda, containerTrafo;
 
@@ -169,7 +169,7 @@ public class Trazabilidad extends AppCompatActivity {
         buscarLote = lote.getText().toString();
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Movimientos_Lote,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INFO_LOTE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -303,7 +303,7 @@ public class Trazabilidad extends AppCompatActivity {
     public void traerTrazabilidadLote() {
         movimientos = new ArrayList<>();
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Trazabilidad_Lote,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_TRAZABILIDAD_LOTE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -377,7 +377,7 @@ public class Trazabilidad extends AppCompatActivity {
         final ExpandableHeightListView listaFotos = findViewById(R.id.listaFotosLote);
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Fotos_Lote,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_FOTOS_LOTE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -645,7 +645,7 @@ public class Trazabilidad extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byteArray = stream.toByteArray();
         final String encodedImage = "holapaco, " + Base64.encodeToString(byteArray, Base64.DEFAULT);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/creaFoto",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.urlEnviarFoto),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -681,7 +681,7 @@ public class Trazabilidad extends AppCompatActivity {
             }
         };
         stringRequest.setTag("ENVIO_FOTOS");
-        stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+        stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
 
         queue.add(stringRequest);
     }

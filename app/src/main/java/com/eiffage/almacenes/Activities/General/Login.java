@@ -67,7 +67,7 @@ public class Login extends AppCompatActivity {
 
         //Comprobar usuario
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.urlBase) + getResources().getString(R.string.urlLogin),
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.urlLogin),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -117,7 +117,7 @@ public class Login extends AppCompatActivity {
     public void recuperarUsuario(final String token){
         //final Usuario[] nuevoUsuario = new Usuario[1];
         RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest sr = new StringRequest(Request.Method.GET, getResources().getString(R.string.urlBase) + getResources().getString(R.string.urlCheck),
+        StringRequest sr = new StringRequest(Request.Method.GET, getResources().getString(R.string.urlCheck),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

@@ -21,7 +21,7 @@ public class ExpandableHeightListView extends ListView{
     }
 
     public ExpandableHeightListView(Context context, AttributeSet attrs,
-                                    int defStyle)
+        int defStyle)
     {
         super(context, attrs, defStyle);
     }

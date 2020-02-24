@@ -1,9 +1,14 @@
 package com.eiffage.almacenes.Activities.General;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -67,6 +73,7 @@ public class Menu extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Menú principal");
 
+
         mySqliteOpenHelper = new MySqliteOpenHelper(this);
         db = mySqliteOpenHelper.getWritableDatabase();
 
@@ -77,6 +84,15 @@ public class Menu extends AppCompatActivity {
         SharedPreferences myPrefs = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         token = myPrefs.getString("token", "Sin valor");
         actualizarAlmacen();
+
+        try{
+            PackageInfo packageInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            int buildVersion = packageInfo.versionCode;
+            pedirUltimaVersion("" + buildVersion);
+            Log.d("Version code", buildVersion + "");
+        }catch (PackageManager.NameNotFoundException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -157,5 +173,64 @@ public class Menu extends AppCompatActivity {
     protected void onRestart() {
         actualizarAlmacen();
         super.onRestart();
+    }
+
+    public void pedirUltimaVersion(final String local){
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, getResources().getString(R.string.urlObtenerUltimaVersion),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jo = new JSONObject(response);
+                            String ultima = jo.getString("content");
+
+                            if(!ultima.equals(local)){
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
+                                builder.setTitle("Actualización disponible")
+                                        .setMessage("Hay una nueva versión disponible de la aplicación.\n\t¿Quieres actualizarla ahora?")
+                                        .setCancelable(false)
+                                        .setNegativeButton("En otro momento", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        . setPositiveButton("Actualizar", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.eiffage.almacenes"); // missing 'http://' will cause crashed
+                                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                builder.show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error VERSION APP", error.toString());
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "Bearer " + token);
+
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+        stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+
     }
 }

@@ -78,7 +78,7 @@ public class Configuracion extends AppCompatActivity {
 
     public void cargarAlmacenesFiltrados(){
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://82.223.65.75:8000/api_endesa/obtenerAlmacenesFiltrados",
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, getResources().getString(R.string.urlAlmacenesFiltrados),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -124,7 +124,7 @@ public class Configuracion extends AppCompatActivity {
             }
         };
         queue.add(stringRequest);
-        stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+        stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
 
     }
 

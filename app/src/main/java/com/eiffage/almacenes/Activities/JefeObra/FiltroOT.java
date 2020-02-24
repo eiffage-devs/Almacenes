@@ -25,7 +25,7 @@ public class FiltroOT extends AppCompatActivity {
     public void codigoManual(View view) {
         AlertDialog.Builder alertdialogobuilder = new AlertDialog.Builder(this);
         alertdialogobuilder
-                .setTitle("¿Quieres usar una OT que no apareceeeeeeeeeeeeeeeeee?")
+                .setTitle("¿Quieres usar una OT que no aparece?")
                 .setMessage("¡Cuidado! Asegúrate de poner bien el código, ya que no se va a verificar su existencia y podría causar problemas.")
                 .setCancelable(true);
 

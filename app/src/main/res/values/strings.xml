@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Eiffage Energía Almacenes</string>
-    <string name="urlBase">http://82.223.65.75:8000/</string>
-    <string name="urlLogin">api_user/autenticar.json</string>
-    <string name="urlCheck">api_check_user/check_token.json</string>
 
     <array name="almacenes">
         <item>PDI Linares</item>
@@ -51,5 +48,26 @@
     <string name="title_activity_pantalla_completa2">PantallaCompleta2</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <!--URL's servicios web-->
+    <string name="urlLogin">https://inet.energia.eiffage.es:8002/api_user/autenticar.json</string>
+    <string name="urlCheck">https://inet.energia.eiffage.es:8002/api_check_user/check_token.json</string>
+    <string name="urlObtenerUltimaVersion">http://192.168.97.198:8000/eiffage_intranet_2/api_endesa/obtenerUltimaVersion</string>
+    <string name="urlAlmacenesFiltrados">http://82.223.65.75:8000/api_endesa/obtenerAlmacenesFiltrados</string>
+    <string name="urlEnviarFoto">http://82.223.65.75:8000/api_endesa/creaFoto</string>
+    <string name="urlObtenerInfoLote">http://82.223.65.75:8000/api_endesa/obtenerInfoLote</string>
+    <string name="urlObtenerMovimientosLote">http://82.223.65.75:8000/api_endesa/obtenerMovimientosLote</string>
+    <string name="urlObtenerFotosLote">http://82.223.65.75:8000/api_endesa/obtenerFotosLote</string>
+    <string name="urlFiltrosAlmacen">http://82.223.65.75:8000/api_endesa/filtrosAlmacen</string>
+    <string name="urlSalidaAlmacenCorrecta">http://82.223.65.75:8000/api_endesa/salidaAlmacenCorrecta</string>
+    <string name="urlObtenerAlmacenes">http://82.223.65.75:8000/api_endesa/obtenerAlmacenes</string>
+    <string name="urlEnviarDatosLote">http://82.223.65.75:8000/api_endesa/confirmarLote_v2</string>
+    <string name="urlObtenerDescArtiulo">http://82.223.65.75:8000/api_endesa/obtenerDescripcionMaterial</string>
+    <string name="urlNecesitaLote">http://82.223.65.75:8000/api_endesa/necesitaLote</string>
+    <string name="urlRegistrarEntrada">http://82.223.65.75:8000/api_endesa/registrarEntrada</string>
+    <string name="urlRegistrarDevEmdesa">http://82.223.65.75:8000/api_endesa/registrarDevEndesa</string>
+    <string name="urlRegistrarSalidaAlmacen">http://82.223.65.75:8000/api_endesa/registrarSalidaAlmacen</string>
+    <string name="urlRegistrarSalidaObra">http://82.223.65.75:8000/api_endesa/registrarSalidaObra_v2</string>
+    <string name="urlRegistrarDevObra">http://82.223.65.75:8000/api_endesa/registrarDevObra_v2</string>
 
 </resources>

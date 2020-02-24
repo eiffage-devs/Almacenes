@@ -43,6 +43,8 @@ import java.util.Map;
 
 public class DevObra extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
+    private final String URL_FILTROS_ALMACEN = this.getResources().getString(R.string.urlFiltrosAlmacen);
+
     SharedPreferences myPrefs;
     String token;
     OTAdapter otAdapter;
@@ -186,7 +188,7 @@ public class DevObra extends AppCompatActivity implements SearchView.OnQueryText
 
     public void obtenerListado(final String almacen) {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/filtrosAlmacen",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_FILTROS_ALMACEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -224,7 +226,7 @@ public class DevObra extends AppCompatActivity implements SearchView.OnQueryText
             }
         };
         queue.add(stringRequest);
-        stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+        stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
     }
 
 

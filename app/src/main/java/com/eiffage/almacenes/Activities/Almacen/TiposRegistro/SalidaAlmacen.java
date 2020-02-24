@@ -37,6 +37,9 @@ import java.util.Map;
 
 public class SalidaAlmacen extends AppCompatActivity {
 
+    private final String URL_OBTENER_ALMACENES = this.getResources().getString(R.string.urlObtenerAlmacenes);
+    private final String URL_SALIDA_ALMACEN_CORRECTA = this.getResources().getString(R.string.urlSalidaAlmacenCorrecta);
+
     Spinner spinner;
     String token;
     ProgressDialog progressDialog;
@@ -84,7 +87,7 @@ public class SalidaAlmacen extends AppCompatActivity {
 
     public void traerAlmacenes(){
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://82.223.65.75:8000/api_endesa/obtenerAlmacenes",
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_OBTENER_ALMACENES,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -134,7 +137,7 @@ public class SalidaAlmacen extends AppCompatActivity {
             }
         };
         queue.add(stringRequest);
-        stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+        stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
 
     }
 
@@ -151,7 +154,7 @@ public class SalidaAlmacen extends AppCompatActivity {
         final Almacen elegido = mySqliteOpenHelper.getElegido(db);
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/salidaAlmacenCorrecta",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SALIDA_ALMACEN_CORRECTA,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

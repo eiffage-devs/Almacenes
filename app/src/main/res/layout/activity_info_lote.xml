@@ -360,7 +360,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_weight="1"
-            android:text="Seguimiento:"
+            android:text="Seguimiento"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
@@ -380,6 +380,87 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp" />
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/labelCodigoCable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:text="Código del cable"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/superior1">
+
+        <EditText
+            android:id="@+id/codigoCable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnEscanear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="2"
+            android:background="@color/azulBootstrap"
+            android:onClick="escanear"
+            android:text="Escanear"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+        <TextView
+            android:id="@+id/descripcionCable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_orange_dark" />
+
+        <TextView
+            android:id="@+id/labelMetros"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:text="Metros de cable"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/metrosCable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Ejemplo: 300"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="#FFB5B4B4"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/labelObservaciones"
@@ -409,7 +490,6 @@
             android:textColor="@android:color/white"
             android:textColorHint="#FFB5B4B4"
             android:textSize="14sp" />
-
 
         <LinearLayout
             android:layout_width="wrap_content"

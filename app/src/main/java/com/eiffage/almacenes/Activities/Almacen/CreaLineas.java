@@ -40,6 +40,7 @@ import com.eiffage.almacenes.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +63,8 @@ public class CreaLineas extends AppCompatActivity {
     String urlFinal;
     ProgressDialog progressDialog;
     RequestQueue colaRegistros = null;
+    boolean vieneConProducto = false;
+    String codigoCable, metrosCable;
 
     boolean infoLoteValidada = false;
 
@@ -274,11 +277,32 @@ public class CreaLineas extends AppCompatActivity {
         else if(requestCode == 1){
             if(resultCode == Activity.RESULT_OK){
                 infoLoteValidada = true;
+                nuevaLinea.setEnabled(true);
+                vieneConProducto = false;
+
+
+                try{
+                    codigoCable = data.getStringExtra("codigoCable");
+                    metrosCable = data.getStringExtra("metrosCable");
+                    vieneConProducto = true;
+                }
+                catch (NullPointerException e){
+
+                }
+                necesitaLote(true);
             }
             else if(resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(this, "No se ha validado la información del lote", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void insertarProductoCable(){
+        codigo.setText(codigoCable);
+        unidades.setText(metrosCable);
+        vieneConProducto = false;
+        necesitaLote(true);
+        superior3.setVisibility(View.GONE);
     }
 
     public void obtenerCodigoArticulo(final String codigoLote){
@@ -417,6 +441,7 @@ public class CreaLineas extends AppCompatActivity {
                                     }
                                 }
                                 else {
+                                    progressDialog.dismiss();
                                     lote.requestFocus();
                                     lote.setError("Campo necesario");
                                     unidades.setText("1");
@@ -435,6 +460,7 @@ public class CreaLineas extends AppCompatActivity {
                                         unidades.requestFocus();
                                         unidades.setError("Este campo es necesario");
                                         nuevaLinea.setEnabled(true);
+                                        progressDialog.dismiss();
                                     }
                                     else {
                                         lote.setError(null);
@@ -493,6 +519,9 @@ public class CreaLineas extends AppCompatActivity {
         //muestraAlert("Nueva línea", "Se ha añadido una línea ---> " + l.toString());
         resetCampos();
         nuevaLinea.setEnabled(true);
+        if(vieneConProducto){
+            insertarProductoCable();
+        }
     }
 
     public void enviarRegistros(View view){

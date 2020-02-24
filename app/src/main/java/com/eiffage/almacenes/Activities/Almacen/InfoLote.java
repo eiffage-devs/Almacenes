@@ -1,5 +1,6 @@
 package com.eiffage.almacenes.Activities.Almacen;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -63,12 +65,14 @@ import java.util.Map;
 public class InfoLote extends AppCompatActivity {
 
     String cod_lote, num_serie, token, mCurrentPhotoPath;
+    boolean esBobina;
     Spinner tipoLote;
 
     TextView numSerie;
 
-    TextView labelMarca, labelPotencia, labelTensionAT, labelTensionBT, labelPeso, labelAño, labelObservaciones, labelIntensidadNominal, labelIntensidadCortocircuito, labelTipoLlenado, labelPasatapas, labelSeguimiento;
-    EditText marca, potencia, tensionAT, tensionBT, peso, año, observaciones, intensidadNominal, intensidadCortocircuito;
+    TextView labelMarca, labelPotencia, labelTensionAT, labelTensionBT, labelPeso, labelAño, labelObservaciones, labelIntensidadNominal,
+            labelIntensidadCortocircuito, labelTipoLlenado, labelPasatapas, labelSeguimiento, labelMetrosCable, labelCodigoCable, descripcionCable;
+    EditText marca, potencia, tensionAT, tensionBT, peso, año, observaciones, intensidadNominal, intensidadCortocircuito, metrosCable, codigoCable;
 
     Spinner  tipoLlenado, pasatapas, seguimiento;
     RelativeLayout relativeTipoLlenado, relativePasatapas, relativeSeguimiento;
@@ -79,7 +83,7 @@ public class InfoLote extends AppCompatActivity {
     ListAdapter listaFotosAdapter;
 
     ProgressDialog progressDialog;
-
+    Button escanear;
     //
     //      Método para usar flecha de atrás en Action Bar
     //
@@ -89,6 +93,7 @@ public class InfoLote extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +116,12 @@ public class InfoLote extends AppCompatActivity {
         numSerie.setText(num_serie);
         labelMarca = findViewById(R.id.labelMarca);
         marca = findViewById(R.id.marca);
+        labelCodigoCable = findViewById(R.id.labelCodigoCable);
+        codigoCable = findViewById(R.id.codigoCable);
+        descripcionCable = findViewById(R.id.descripcionCable);
+        labelMetrosCable = findViewById(R.id.labelMetros);
+        escanear = findViewById(R.id.btnEscanear);
+        metrosCable = findViewById(R.id.metrosCable);
         labelObservaciones = findViewById(R.id.labelObservaciones);
         observaciones = findViewById(R.id.observaciones);
 
@@ -118,6 +129,20 @@ public class InfoLote extends AppCompatActivity {
         relativePasatapas = findViewById(R.id.relative3);
         relativeSeguimiento = findViewById(R.id.relative4);
         listaFotos = findViewById(R.id.listaFotos);
+
+        codigoCable.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    // code to execute when EditText loses focus
+                    if(codigoCable.getText().toString().length() == 6){
+                        obtenerDescArticulo();
+                    }
+                    else
+                        descripcionCable.setText("");
+                }
+            }
+        });
 
         fotos = new ArrayList<>();
         urlFotos = new ArrayList<>();
@@ -178,6 +203,15 @@ public class InfoLote extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(tipoLote.getSelectedItem().toString().equals("Bobina")){
 
+                    esBobina = true;
+
+                    labelCodigoCable.setVisibility(View.VISIBLE);
+                    codigoCable.setVisibility(View.VISIBLE);
+                    descripcionCable.setVisibility(View.VISIBLE);
+                    escanear.setVisibility(View.VISIBLE);
+                    labelMetrosCable.setVisibility(View.VISIBLE);
+                    metrosCable.setVisibility(View.VISIBLE);
+
                     //Quitamos trafos
                     labelPotencia.setVisibility(View.GONE);
                     labelTensionAT.setVisibility(View.GONE);
@@ -210,6 +244,15 @@ public class InfoLote extends AppCompatActivity {
                     intensidadCortocircuito.setVisibility(View.GONE);
                 }
                 else if(tipoLote.getSelectedItem().toString().equals("Celda")){
+
+                    esBobina = false;
+
+                    labelCodigoCable.setVisibility(View.GONE);
+                    codigoCable.setVisibility(View.GONE);
+                    descripcionCable.setVisibility(View.GONE);
+                    escanear.setVisibility(View.GONE);
+                    labelMetrosCable.setVisibility(View.GONE);
+                    metrosCable.setVisibility(View.GONE);
 
                     //Quitamos trafos
                     labelPotencia.setVisibility(View.GONE);
@@ -250,6 +293,15 @@ public class InfoLote extends AppCompatActivity {
 
                 }
                 else if(tipoLote.getSelectedItem().toString().equals("Trafo")){
+
+                    esBobina = false;
+
+                    labelCodigoCable.setVisibility(View.GONE);
+                    codigoCable.setVisibility(View.GONE);
+                    descripcionCable.setVisibility(View.GONE);
+                    escanear.setVisibility(View.GONE);
+                    labelMetrosCable.setVisibility(View.GONE);
+                    metrosCable.setVisibility(View.GONE);
 
                     //Quitamos celdas
                     labelTensionAT.setVisibility(View.GONE);
@@ -303,6 +355,7 @@ public class InfoLote extends AppCompatActivity {
         //obtenerInfoLote();
     }
 
+    //A día de hoy no se utiliza
     public void obtenerInfoLote(){
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -447,10 +500,11 @@ public class InfoLote extends AppCompatActivity {
     }
 
     public void enviarDatosLote(View v){
+        //URL Servidor de producción --> http://82.223.65.75:8000/api_endesa/confirmarLote_v2
         if(validarCampos()){
             muestraLoader("Enviando información del lote...");
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/confirmarLote",
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/confirmarLote_v2",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -498,6 +552,16 @@ public class InfoLote extends AppCompatActivity {
                     params.put("tipoLote", tipoLote.getSelectedItem().toString());
                     params.put("producto", num_serie);
                     params.put("marca", marca.getText().toString());
+
+                    if(codigoCable.getText().toString().length() > 0)
+                        params.put("codigoCable", codigoCable.getText().toString());
+                    else
+                        params.put("codigoCable", "0");
+
+                    if(metrosCable.getText().toString().length() > 0)
+                        params.put("metrosCable", metrosCable.getText().toString());
+                    else
+                        params.put("metrosCable", "0");
 
                     if(observaciones.getText().toString().length() > 0)
                         params.put("observaciones", observaciones.getText().toString());
@@ -570,6 +634,16 @@ public class InfoLote extends AppCompatActivity {
         else {
             switch (tipoLote.getSelectedItem().toString()){
                 case "Bobina":
+                    if(codigoCable.getText().toString().length() <= 0){
+                        codigoCable.requestFocus();
+                        codigoCable.setError("Campo necesario");
+                        return false;
+                    }
+                    else if(metrosCable.getText().toString().length() <= 0){
+                        metrosCable.requestFocus();
+                        metrosCable.setError("Campo necesario");
+                        return false;
+                    }
                     return true;
 
                 case "Celda":
@@ -646,6 +720,10 @@ public class InfoLote extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "Lote " + response.substring(posLote, posId) + " validado", Toast.LENGTH_SHORT).show();
                                         Log.d("Toast", "Lote " + response.substring(posLote, posId) + " validado");
                                         Intent returnIntent = new Intent(InfoLote.this, CreaLineas.class);
+                                        if(esBobina){
+                                            returnIntent.putExtra("codigoCable", codigoCable.getText().toString());
+                                            returnIntent.putExtra("metrosCable", metrosCable.getText().toString());
+                                        }
                                         setResult(Activity.RESULT_OK,returnIntent);
                                         finish();
                                     }
@@ -692,6 +770,10 @@ public class InfoLote extends AppCompatActivity {
         else {
             Toast.makeText(InfoLote.this, "Se ha validado el lote, pero no se han adjuntado fotos.", Toast.LENGTH_SHORT).show();
             Intent returnIntent = new Intent(InfoLote.this, CreaLineas.class);
+            if(esBobina){
+                returnIntent.putExtra("codigoCable", codigoCable.getText().toString());
+                returnIntent.putExtra("metrosCable", metrosCable.getText().toString());
+            }
             setResult(Activity.RESULT_OK,returnIntent);
             finish();
         }
@@ -725,11 +807,19 @@ public class InfoLote extends AppCompatActivity {
 
         Intent getPictureIntent = new Intent(Intent.ACTION_PICK);
         getPictureIntent.setType("image/");
-        startActivityForResult(getPictureIntent, 1);
+        startActivityForResult(getPictureIntent, 2);
     }
 
     //
-    //De aquí para abajo nos ocupamos de la gestión de las fotos que se hacen en la activity
+    //      Botón de escanear
+    //
+    public void escanear(View view){
+        Intent i = new Intent(InfoLote.this, ScannerActivity.class);
+        startActivityForResult(i, 2);
+    }
+
+    //
+    //De aquí para abajo nos ocupamos de la gestión de las fotos que se hacen en la activity, y de recoger el código escaneado
     //
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -829,6 +919,27 @@ public class InfoLote extends AppCompatActivity {
                 Toast.makeText(InfoLote.this, "No se ha seleccionado ninguna foto", Toast.LENGTH_LONG).show();
             }
         }
+        if(requestCode == 2){
+            if(resultCode == Activity.RESULT_OK){
+                //
+                //      Si tiene longitud 6. es un código de artículo
+                //
+                if(data.getStringExtra("codigo").length() == 6){
+                    codigoCable.setText(data.getStringExtra("codigo"));
+                    obtenerDescArticulo();
+                }
+
+                //
+                //      En caso contrario, es un código de lote
+                //
+                else {
+                    Toast.makeText(InfoLote.this, "No se ha detectado un código de artículo válido", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if(resultCode == Activity.RESULT_CANCELED){
+                Toast.makeText(this, "No se ha capturado ningún código", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private File createImageFile() throws IOException {
@@ -845,6 +956,61 @@ public class InfoLote extends AppCompatActivity {
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    public void obtenerDescArticulo(){
+        muestraLoader("Obteniendo información del artículo...");
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/obtenerDescripcionMaterial",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        Log.d("Info material", response);
+                        JSONObject  jo = null;
+
+                        try {
+                            jo = new JSONObject(response);
+                            String res = jo.getString("desc");
+                            if(res.contains("ERROR")){
+                                codigoCable.setText("");
+                                Toast.makeText(InfoLote.this, "No existe el material indicado", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                descripcionCable.setText(res);
+                            }
+                        } catch (JSONException e) {
+                            progressDialog.dismiss();
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error info material", error.toString());
+                progressDialog.dismiss();
+                Toast.makeText(InfoLote.this, "No se ha podido recuperar la información del material", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "Bearer " + token);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("codigo", codigoCable.getText().toString());
+                return params;
+            }
+        };
+        queue.add(stringRequest);
     }
 
     public void muestraLoader(String message){
