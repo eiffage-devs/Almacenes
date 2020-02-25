@@ -41,8 +41,8 @@ import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
 
-    private final String URL_LOGIN = this.getResources().getString(R.string.urlLogin);
-    private final String URL_DATOS_USUARIO = this.getResources().getString(R.string.urlCheck);
+    private String URL_LOGIN = "";
+    private String URL_DATOS_USUARIO = "";
 
     String usuario, contraseña;
     EditText email, pass;
@@ -54,6 +54,9 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        URL_LOGIN = this.getResources().getString(R.string.urlLogin);
+        URL_DATOS_USUARIO = this.getResources().getString(R.string.urlCheck);
 
         getSupportActionBar().hide();
 

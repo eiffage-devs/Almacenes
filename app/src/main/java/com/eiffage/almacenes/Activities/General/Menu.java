@@ -71,7 +71,7 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        getSupportActionBar().setTitle("Menú principal");
+        getSupportActionBar().setTitle("EE Almacenes");
 
 
         mySqliteOpenHelper = new MySqliteOpenHelper(this);
