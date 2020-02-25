@@ -1,9 +1,13 @@
 package com.eiffage.almacenes.Activities.General;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +16,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,6 +41,9 @@ import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
 
+    private final String URL_LOGIN = this.getResources().getString(R.string.urlLogin);
+    private final String URL_DATOS_USUARIO = this.getResources().getString(R.string.urlCheck);
+
     String usuario, contraseña;
     EditText email, pass;
 
@@ -46,7 +55,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setTitle("Inicio de sesión");
+        getSupportActionBar().hide();
 
         email = findViewById(R.id.email);
         pass = findViewById(R.id.contraseña);
@@ -55,6 +64,25 @@ public class Login extends AppCompatActivity {
         token = sharedPreferences.getString("token", "Sin valor");
 
         recuperarUsuario(token);
+
+
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !pass.hasFocus()) {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
+        pass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !email.hasFocus()) {
+                    hideKeyboard(v);
+                }
+            }
+        });
 
     }
 
@@ -67,7 +95,7 @@ public class Login extends AppCompatActivity {
 
         //Comprobar usuario
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.urlLogin),
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_LOGIN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -117,7 +145,7 @@ public class Login extends AppCompatActivity {
     public void recuperarUsuario(final String token){
         //final Usuario[] nuevoUsuario = new Usuario[1];
         RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest sr = new StringRequest(Request.Method.GET, getResources().getString(R.string.urlCheck),
+        StringRequest sr = new StringRequest(Request.Method.GET, URL_DATOS_USUARIO,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -183,6 +211,12 @@ public class Login extends AppCompatActivity {
                 })
                 .create();
         alertdialogobuilder.show();
+    }
+
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 }

@@ -52,6 +52,7 @@
     <!--URL's servicios web-->
     <string name="urlLogin">https://inet.energia.eiffage.es:8002/api_user/autenticar.json</string>
     <string name="urlCheck">https://inet.energia.eiffage.es:8002/api_check_user/check_token.json</string>
+
     <string name="urlObtenerUltimaVersion">http://192.168.97.198:8000/eiffage_intranet_2/api_endesa/obtenerUltimaVersion</string>
     <string name="urlAlmacenesFiltrados">http://82.223.65.75:8000/api_endesa/obtenerAlmacenesFiltrados</string>
     <string name="urlEnviarFoto">http://82.223.65.75:8000/api_endesa/creaFoto</string>
