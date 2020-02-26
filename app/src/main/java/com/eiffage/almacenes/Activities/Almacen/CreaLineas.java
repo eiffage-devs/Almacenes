@@ -9,10 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +32,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.eiffage.almacenes.Adapters.LineasAdapter;
-import com.eiffage.almacenes.Objetos.Almacen;
 import com.eiffage.almacenes.Objetos.Linea;
 import com.eiffage.almacenes.Objetos.MySqliteOpenHelper;
 import com.eiffage.almacenes.R;
@@ -40,14 +39,14 @@ import com.eiffage.almacenes.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CreaLineas extends AppCompatActivity {
 
-
+    private String URL_CODIGO_ARTICULO = "-";
+    private String URL_NECESITA_LOTE = "-";
     //-----------Elementos de la vista-----------
     ListView lineas;
     EditText codigo, unidades, lote;
@@ -77,22 +76,22 @@ public class CreaLineas extends AppCompatActivity {
 
     //-----------Entradas------------------------
     String albaran, etiqueta;
-    final String urlEntradas = "http://82.223.65.75:8000/api_endesa/registrarEntrada";
+    private String urlEntradas = "-";
 
     //-----------Devoluciones a Endesa-----------
-    final String urlDevolucionesEndesa = "http://82.223.65.75:8000/api_endesa/registrarDevEndesa";
+    private String urlDevolucionesEndesa = "-";
 
     //-----------Salidas a almacén---------------
     String almacenDestino;
-    final String urlSalidasAlmacen = "http://82.223.65.75:8000/api_endesa/registrarSalidaAlmacen";
+    private String urlSalidasAlmacen = "-";
 
     //----------Salidas a obra------------------
     String incidenciaElegida, otElegida, ticketSCM;
-    final String urlSalidasObra = "http://82.223.65.75:8000/api_endesa/registrarSalidaObra_v2";
+    private String urlSalidasObra = "-";
 
     //---------Devoluciones de obra------------
     //Utilizamos las mismas variables String que en las salidas a obra
-    final String urlDevolucionesObra = "http://82.223.65.75:8000/api_endesa/registrarDevObra_v2";
+    private String urlDevolucionesObra = "-";
 
     //
     //      Método para usar flecha de atrás en Action Bar
@@ -109,6 +108,14 @@ public class CreaLineas extends AppCompatActivity {
         setContentView(R.layout.activity_crea_lineas);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Nuevos movimientos");
+
+        URL_CODIGO_ARTICULO = getResources().getString(R.string.urlObtenerCodigoArticulo);
+        URL_NECESITA_LOTE = getResources().getString(R.string.urlNecesitaLote);
+        urlEntradas = getResources().getString(R.string.urlRegistrarEntrada);
+        urlDevolucionesEndesa = getResources().getString(R.string.urlRegistrarDevEmdesa);
+        urlSalidasAlmacen = getResources().getString(R.string.urlRegistrarSalidaAlmacen);
+        urlSalidasObra = getResources().getString(R.string.urlRegistrarSalidaObra);
+        urlDevolucionesObra = getResources().getString(R.string.urlRegistrarDevObra);
 
         //
         //      Pedir permisos de cámara para poder escanear
@@ -307,7 +314,7 @@ public class CreaLineas extends AppCompatActivity {
 
     public void obtenerCodigoArticulo(final String codigoLote){
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/obtenerCodigoArticulo",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CODIGO_ARTICULO,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -340,7 +347,7 @@ public class CreaLineas extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -383,7 +390,7 @@ public class CreaLineas extends AppCompatActivity {
         muestraLoader();
         //Comprobar en Navision si necesita lote
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/necesitaLote",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_NECESITA_LOTE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -493,7 +500,7 @@ public class CreaLineas extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -619,7 +626,7 @@ public class CreaLineas extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
+                //headers.put("Content-Type", "application/json");
                 headers.put("Authorization", "Bearer " + token);
 
                 return headers;
@@ -632,7 +639,7 @@ public class CreaLineas extends AppCompatActivity {
                 return parametros;
             }
         };
-        stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+        stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
         colaRegistros.add(stringRequest);
     }
 

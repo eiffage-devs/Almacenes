@@ -6,10 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -46,7 +46,7 @@ import java.util.Map;
 
 public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
-    private final String URL_FILTROS_ALMACEN = this.getResources().getString(R.string.urlFiltrosAlmacen);
+    private String URL_FILTROS_ALMACEN = "-";
 
     SharedPreferences myPrefs;
     String token;
@@ -87,6 +87,8 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Parámetros generales");
+
+        URL_FILTROS_ALMACEN = this.getResources().getString(R.string.urlFiltrosAlmacen);
 
         MySqliteOpenHelper mySqliteOpenHelper = new MySqliteOpenHelper(this);
         SQLiteDatabase db = mySqliteOpenHelper.getWritableDatabase();
@@ -189,7 +191,7 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;

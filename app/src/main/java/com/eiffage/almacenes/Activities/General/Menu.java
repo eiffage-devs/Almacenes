@@ -8,15 +8,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -27,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.eiffage.almacenes.Activities.Almacen.OpcionesAlmacenero;
-import com.eiffage.almacenes.Activities.JefeObra.OpcionesJefeObra;
 import com.eiffage.almacenes.Activities.TrazabilidadLote.Trazabilidad;
 import com.eiffage.almacenes.Objetos.Almacen;
 import com.eiffage.almacenes.Objetos.MySqliteOpenHelper;
@@ -41,6 +39,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Menu extends AppCompatActivity {
+
+    private String URL_ULTIMA_VERSION = "-";
 
     TextView nombreAlmacen;
     String token;
@@ -61,6 +61,39 @@ public class Menu extends AppCompatActivity {
                 Intent i = new Intent(Menu.this, Configuracion.class);
                 startActivity(i);
                 break;
+            case R.id.menuLogout:
+                AlertDialog.Builder alertdialogobuilder = new AlertDialog.Builder(this);
+                alertdialogobuilder
+                        .setTitle("Confirmar cierre de sesión")
+                        .setMessage("¿Seguro que deseas salir?")
+                        .setCancelable(true)
+                        .setPositiveButton("Cerrar sesión", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
+                                editor.putString("token", "Sin valor");
+                                editor.putString("cod_recurso", "-");
+                                editor.putString("delegacion", "-");
+                                editor.putString("nombre", "-");
+                                editor.putString("empresa", "-");
+                                editor.putString("email", "-");
+                                editor.apply();
+
+                                Intent i = new Intent(Menu.this, Login.class);
+                                startActivity(i);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("En otro momento", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .create();
+                alertdialogobuilder.show();
+                break;
         }
 
         return true;
@@ -70,6 +103,8 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        URL_ULTIMA_VERSION = getResources().getString(R.string.urlObtenerUltimaVersion);
 
         getSupportActionBar().setTitle("EE Almacenes");
 
@@ -144,7 +179,7 @@ public class Menu extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -177,7 +212,7 @@ public class Menu extends AppCompatActivity {
 
     public void pedirUltimaVersion(final String local){
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, getResources().getString(R.string.urlObtenerUltimaVersion),
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_ULTIMA_VERSION,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -223,7 +258,7 @@ public class Menu extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;

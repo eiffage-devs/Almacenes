@@ -4,19 +4,16 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.icu.text.IDNA;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -26,9 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,9 +37,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.eiffage.almacenes.Activities.General.Configuracion;
 import com.eiffage.almacenes.Activities.General.ExpandableHeightListView;
-import com.eiffage.almacenes.Activities.TrazabilidadLote.Trazabilidad;
 import com.eiffage.almacenes.Adapters.ListaFotosAdapter;
 import com.eiffage.almacenes.R;
 
@@ -63,6 +56,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InfoLote extends AppCompatActivity {
+
+    private String URL_INFO_LOTE = "-";
+    private String URL_CONFIRMAR_LOTE = "-";
+    private String URL_ENVIAR_FOTO = "-";
+    private String URL_DESCRIPCION_MATERIAL = "-";
 
     String cod_lote, num_serie, token, mCurrentPhotoPath;
     boolean esBobina;
@@ -98,6 +96,11 @@ public class InfoLote extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_lote);
+
+        URL_INFO_LOTE = getResources().getString(R.string.urlObtenerInfoLote);
+        URL_CONFIRMAR_LOTE = getResources().getString(R.string.urlEnviarDatosLote);
+        URL_ENVIAR_FOTO = getResources().getString(R.string.urlEnviarFoto);
+        URL_DESCRIPCION_MATERIAL = getResources().getString(R.string.urlObtenerDescArtiulo);
 
         Intent i = getIntent();
         cod_lote = i.getStringExtra("cod_lote");
@@ -359,7 +362,7 @@ public class InfoLote extends AppCompatActivity {
     public void obtenerInfoLote(){
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/obtenerInfoLote",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INFO_LOTE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -482,7 +485,7 @@ public class InfoLote extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -504,7 +507,7 @@ public class InfoLote extends AppCompatActivity {
         if(validarCampos()){
             muestraLoader("Enviando información del lote...");
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/confirmarLote_v2",
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CONFIRMAR_LOTE,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -538,7 +541,7 @@ public class InfoLote extends AppCompatActivity {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("Content-Type", "application/json");
+                    //params.put("Content-Type", "application/json");
                     params.put("Authorization", "Bearer " + token);
 
                     return params;
@@ -707,7 +710,7 @@ public class InfoLote extends AppCompatActivity {
                 byte[] byteArray = stream.toByteArray();
                 final String encodedImage = "holapaco, " + Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/creaFoto",
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ENVIAR_FOTO,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -746,7 +749,7 @@ public class InfoLote extends AppCompatActivity {
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> params = new HashMap<String, String>();
-                        params.put("Content-Type", "application/json");
+                        //params.put("Content-Type", "application/json");
                         params.put("Authorization", "Bearer " + token);
 
                         return params;
@@ -762,7 +765,7 @@ public class InfoLote extends AppCompatActivity {
                     }
                 };
                 stringRequest.setTag("ENVIO_FOTOS");
-                stringRequest.setRetryPolicy((new DefaultRetryPolicy(60 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
+                stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
 
                 queue.add(stringRequest);
             }
@@ -961,7 +964,7 @@ public class InfoLote extends AppCompatActivity {
     public void obtenerDescArticulo(){
         muestraLoader("Obteniendo información del artículo...");
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://82.223.65.75:8000/api_endesa/obtenerDescripcionMaterial",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DESCRIPCION_MATERIAL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -997,7 +1000,7 @@ public class InfoLote extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+               // params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;

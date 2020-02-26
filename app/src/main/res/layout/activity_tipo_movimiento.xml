@@ -82,10 +82,12 @@
     <Button
         android:id="@+id/button6"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@color/azulBootstrap"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
         android:onClick="siguiente"
         android:text="Siguiente"
         android:textColor="@android:color/white" />

@@ -24,9 +24,12 @@
     <RelativeLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_below="@id/textView3"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@android:color/white">
 
         <Spinner
@@ -43,13 +46,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/relative"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:background="@color/azulBootstrap"
         android:onClick="guardar"
-        android:paddingBottom="20dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
         android:text="Guardar selección"
         android:textColor="@android:color/white" />
 
@@ -60,21 +63,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:text="Versión 1.2.3"
+        android:text="Versión 2.0"
         android:textColor="@android:color/white" />
-
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorAccent"
-        android:onClick="cerrarSesion"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
-        android:text="Cerrar sesión"
-        android:textColor="@android:color/white"
-        android:textStyle="bold" />
 
 </RelativeLayout>

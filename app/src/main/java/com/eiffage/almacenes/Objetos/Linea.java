@@ -1,7 +1,6 @@
 package com.eiffage.almacenes.Objetos;
 
 public class Linea {
-
     private String codigo, lote, descripcion;
     private int unidades;
 
@@ -38,4 +37,5 @@ public class Linea {
     public String getDescripcion() {
         return descripcion;
     }
+
 }

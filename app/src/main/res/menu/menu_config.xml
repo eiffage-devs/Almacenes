@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menuConfig"
-        android:title="Configuración" />
+        android:icon="@drawable/ic_ajustes"
+        android:title="Configuración"
+        android:visible="true"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/menuLogout"
+        android:icon="@drawable/logout_blanco"
+        android:title="Cerrar sesión"
+        android:visible="true"
+        app:showAsAction="always"
+        />
 </menu>

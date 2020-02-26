@@ -34,7 +34,7 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="150dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="50dp"
@@ -44,7 +44,8 @@
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/logo_blanco"
-                android:visibility="visible" />
+                android:visibility="visible"
+                app:srcCompat="@drawable/logoalmacenes" />
 
             <EditText
                 android:id="@+id/email"

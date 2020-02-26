@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,8 +37,8 @@ import java.util.Map;
 
 public class SalidaAlmacen extends AppCompatActivity {
 
-    private final String URL_OBTENER_ALMACENES = this.getResources().getString(R.string.urlObtenerAlmacenes);
-    private final String URL_SALIDA_ALMACEN_CORRECTA = this.getResources().getString(R.string.urlSalidaAlmacenCorrecta);
+    private String URL_OBTENER_ALMACENES = "-";
+    private String URL_SALIDA_ALMACEN_CORRECTA = "-";
 
     Spinner spinner;
     String token;
@@ -63,6 +63,9 @@ public class SalidaAlmacen extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Parámetros generales");
+
+        URL_OBTENER_ALMACENES = this.getResources().getString(R.string.urlObtenerAlmacenes);
+        URL_SALIDA_ALMACEN_CORRECTA = this.getResources().getString(R.string.urlSalidaAlmacenCorrecta);
 
         mySqliteOpenHelper = new MySqliteOpenHelper(this);
         db = mySqliteOpenHelper.getWritableDatabase();
@@ -130,7 +133,7 @@ public class SalidaAlmacen extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -189,7 +192,7 @@ public class SalidaAlmacen extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;

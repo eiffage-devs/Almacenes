@@ -53,22 +53,23 @@
     <string name="urlLogin">https://inet.energia.eiffage.es:8002/api_user/autenticar.json</string>
     <string name="urlCheck">https://inet.energia.eiffage.es:8002/api_check_user/check_token.json</string>
 
-    <string name="urlObtenerUltimaVersion">http://192.168.97.198:8000/eiffage_intranet_2/api_endesa/obtenerUltimaVersion</string>
-    <string name="urlAlmacenesFiltrados">http://82.223.65.75:8000/api_endesa/obtenerAlmacenesFiltrados</string>
-    <string name="urlEnviarFoto">http://82.223.65.75:8000/api_endesa/creaFoto</string>
-    <string name="urlObtenerInfoLote">http://82.223.65.75:8000/api_endesa/obtenerInfoLote</string>
-    <string name="urlObtenerMovimientosLote">http://82.223.65.75:8000/api_endesa/obtenerMovimientosLote</string>
-    <string name="urlObtenerFotosLote">http://82.223.65.75:8000/api_endesa/obtenerFotosLote</string>
-    <string name="urlFiltrosAlmacen">http://82.223.65.75:8000/api_endesa/filtrosAlmacen</string>
-    <string name="urlSalidaAlmacenCorrecta">http://82.223.65.75:8000/api_endesa/salidaAlmacenCorrecta</string>
-    <string name="urlObtenerAlmacenes">http://82.223.65.75:8000/api_endesa/obtenerAlmacenes</string>
-    <string name="urlEnviarDatosLote">http://82.223.65.75:8000/api_endesa/confirmarLote_v2</string>
-    <string name="urlObtenerDescArtiulo">http://82.223.65.75:8000/api_endesa/obtenerDescripcionMaterial</string>
-    <string name="urlNecesitaLote">http://82.223.65.75:8000/api_endesa/necesitaLote</string>
-    <string name="urlRegistrarEntrada">http://82.223.65.75:8000/api_endesa/registrarEntrada</string>
-    <string name="urlRegistrarDevEmdesa">http://82.223.65.75:8000/api_endesa/registrarDevEndesa</string>
-    <string name="urlRegistrarSalidaAlmacen">http://82.223.65.75:8000/api_endesa/registrarSalidaAlmacen</string>
-    <string name="urlRegistrarSalidaObra">http://82.223.65.75:8000/api_endesa/registrarSalidaObra_v2</string>
-    <string name="urlRegistrarDevObra">http://82.223.65.75:8000/api_endesa/registrarDevObra_v2</string>
+    <string name="urlObtenerUltimaVersion">https://inet.energia.eiffage.es:8002/eiffage_intranet_2/api_endesa/obtenerUltimaVersion</string>
+    <string name="urlAlmacenesFiltrados">https://inet.energia.eiffage.es:8002/api_endesa/obtenerAlmacenesFiltrados</string>
+    <string name="urlEnviarFoto">https://inet.energia.eiffage.es:8002/api_endesa/creaFoto</string>
+    <string name="urlObtenerInfoLote">https://inet.energia.eiffage.es:8002/api_endesa/obtenerInfoLote</string>
+    <string name="urlObtenerMovimientosLote">https://inet.energia.eiffage.es:8002/api_endesa/obtenerMovimientosLote</string>
+    <string name="urlObtenerFotosLote">https://inet.energia.eiffage.es:8002/api_endesa/obtenerFotosLote</string>
+    <string name="urlFiltrosAlmacen">https://inet.energia.eiffage.es:8002/api_endesa/filtrosAlmacen</string>
+    <string name="urlSalidaAlmacenCorrecta">https://inet.energia.eiffage.es:8002/api_endesa/salidaAlmacenCorrecta</string>
+    <string name="urlObtenerAlmacenes">https://inet.energia.eiffage.es:8002/api_endesa/obtenerAlmacenes</string>
+    <string name="urlEnviarDatosLote">https://inet.energia.eiffage.es:8002/api_endesa/confirmarLote_v2</string>
+    <string name="urlObtenerDescArtiulo">https://inet.energia.eiffage.es:8002/api_endesa/obtenerDescripcionMaterial</string>
+    <string name="urlNecesitaLote">https://inet.energia.eiffage.es:8002/api_endesa/necesitaLote</string>
+    <string name="urlRegistrarEntrada">https://inet.energia.eiffage.es:8002/api_endesa/registrarEntrada</string>
+    <string name="urlRegistrarDevEmdesa">https://inet.energia.eiffage.es:8002/api_endesa/registrarDevEndesa</string>
+    <string name="urlRegistrarSalidaAlmacen">https://inet.energia.eiffage.es:8002/api_endesa/registrarSalidaAlmacen</string>
+    <string name="urlRegistrarSalidaObra">https://inet.energia.eiffage.es:8002/api_endesa/registrarSalidaObra_v2</string>
+    <string name="urlRegistrarDevObra">https://inet.energia.eiffage.es:8002/api_endesa/registrarDevObra_v2</string>
+    <string name="urlObtenerCodigoArticulo">https://inet.energia.eiffage.es:8002/api_endesa/obtenerCodigoArticulo</string>
 
 </resources>

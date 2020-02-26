@@ -2,15 +2,13 @@ package com.eiffage.almacenes.Activities.General;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -37,6 +35,8 @@ import java.util.Map;
 
 public class Configuracion extends AppCompatActivity {
 
+    private String URL_ALMACENES_FILTRADOS = "-";
+
     Spinner spinner;
     ArrayList<Almacen> almacenes;
 
@@ -61,6 +61,8 @@ public class Configuracion extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Configuración");
 
+        URL_ALMACENES_FILTRADOS = getResources().getString(R.string.urlAlmacenesFiltrados);
+
         mySqliteOpenHelper = new MySqliteOpenHelper(this);
         db = mySqliteOpenHelper.getWritableDatabase();
 
@@ -78,7 +80,7 @@ public class Configuracion extends AppCompatActivity {
 
     public void cargarAlmacenesFiltrados(){
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, getResources().getString(R.string.urlAlmacenesFiltrados),
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_ALMACENES_FILTRADOS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -117,7 +119,7 @@ public class Configuracion extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -129,11 +131,16 @@ public class Configuracion extends AppCompatActivity {
     }
 
     public void guardar(View view){
-        almacenElegido = spinner.getSelectedItem().toString();
+        if(almacenes.size() == 0){
+            muestraAlert("No se ha seleccionado un almacén", "No se puede elegir un almacén en blanco.");
+        }
+        else {
+            almacenElegido = spinner.getSelectedItem().toString();
 
-        mySqliteOpenHelper.cambiarAlmacenElegido(db, new Almacen("-", almacenElegido));
+            mySqliteOpenHelper.cambiarAlmacenElegido(db, new Almacen("-", almacenElegido));
 
-        muestraAlert("Almacén actualizado", "Ahora se trabaja en:  " + almacenElegido);
+            muestraAlert("Almacén actualizado", "Ahora se trabaja en:  " + almacenElegido);
+        }
     }
 
     public void muestraAlert(String titulo, String mensaje){
@@ -148,16 +155,5 @@ public class Configuracion extends AppCompatActivity {
                     }
                 });
         builder.show();
-    }
-
-    public void cerrarSesion(View view){
-        SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
-        editor.putString("token", "Sin valor");
-        editor.apply();
-
-        Intent i = new Intent(Configuracion.this, Login.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
-        finish();
     }
 }

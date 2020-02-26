@@ -14,10 +14,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -37,11 +37,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.eiffage.almacenes.Activities.Almacen.CreaLineas;
 import com.eiffage.almacenes.Activities.Almacen.ScannerActivity;
 import com.eiffage.almacenes.Activities.General.ExpandableHeightListView;
 import com.eiffage.almacenes.Adapters.FotosCargadasAdapter;
-import com.eiffage.almacenes.Adapters.ListaFotosAdapter;
 import com.eiffage.almacenes.Adapters.MovimientosAdapter;
 import com.eiffage.almacenes.Objetos.Movimiento;
 import com.eiffage.almacenes.R;
@@ -63,9 +61,10 @@ import java.util.Map;
 
 public class Trazabilidad extends AppCompatActivity {
 
-    private final String URL_INFO_LOTE = this.getResources().getString(R.string.urlObtenerInfoLote);
-    private final String URL_TRAZABILIDAD_LOTE =  this.getResources().getString(R.string.urlObtenerMovimientosLote);
-    private final String URL_FOTOS_LOTE = this.getResources().getString(R.string.urlObtenerFotosLote);
+    private String URL_INFO_LOTE = "-";
+    private String URL_TRAZABILIDAD_LOTE = "-";
+    private String URL_FOTOS_LOTE = "-";
+    private String URL_ENVIAR_FOTO = "-";
 
     EditText lote;
     Button añadirFoto;
@@ -105,6 +104,11 @@ public class Trazabilidad extends AppCompatActivity {
         setContentView(R.layout.activity_trazabilidad);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Consulta de lote");
+
+        URL_INFO_LOTE = this.getResources().getString(R.string.urlObtenerInfoLote);
+        URL_TRAZABILIDAD_LOTE = URL_INFO_LOTE = this.getResources().getString(R.string.urlObtenerInfoLote);
+        URL_FOTOS_LOTE = this.getResources().getString(R.string.urlObtenerFotosLote);
+        URL_ENVIAR_FOTO = this.getResources().getString(R.string.urlEnviarFoto);
 
         SharedPreferences myPrefs = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         token = myPrefs.getString("token", "Sin valor");
@@ -151,7 +155,6 @@ public class Trazabilidad extends AppCompatActivity {
 
         movimientos = new ArrayList<>();
         añadirFoto = findViewById(R.id.btnAñadirFoto);
-
 
         //
         //      Pedir permisos de cámara para poder escanear
@@ -212,7 +215,7 @@ public class Trazabilidad extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -355,7 +358,7 @@ public class Trazabilidad extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -434,7 +437,7 @@ public class Trazabilidad extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
@@ -645,7 +648,7 @@ public class Trazabilidad extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byteArray = stream.toByteArray();
         final String encodedImage = "holapaco, " + Base64.encodeToString(byteArray, Base64.DEFAULT);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.urlEnviarFoto),
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ENVIAR_FOTO,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -665,7 +668,7 @@ public class Trazabilidad extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                //params.put("Content-Type", "application/json");
                 params.put("Authorization", "Bearer " + token);
 
                 return params;
