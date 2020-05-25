@@ -106,7 +106,7 @@ public class Trazabilidad extends AppCompatActivity {
         getSupportActionBar().setTitle("Consulta de lote");
 
         URL_INFO_LOTE = this.getResources().getString(R.string.urlObtenerInfoLote);
-        URL_TRAZABILIDAD_LOTE = URL_INFO_LOTE = this.getResources().getString(R.string.urlObtenerInfoLote);
+        URL_TRAZABILIDAD_LOTE = this.getResources().getString(R.string.urlObtenerMovimientosLote);
         URL_FOTOS_LOTE = this.getResources().getString(R.string.urlObtenerFotosLote);
         URL_ENVIAR_FOTO = this.getResources().getString(R.string.urlEnviarFoto);
 
@@ -176,6 +176,7 @@ public class Trazabilidad extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("Resp INFO LOTE", response);
                         ocultarTeclado(Trazabilidad.this);
 
                         try {
@@ -247,6 +248,7 @@ public class Trazabilidad extends AppCompatActivity {
             bobinaObservaciones.setText(response.getString("observaciones"));
 
         } catch (JSONException e) {
+            e.printStackTrace();
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -312,6 +314,7 @@ public class Trazabilidad extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONObject jo = new JSONObject(response);
+                            Log.d("RESP TRAZABILIDAD", response);
                             JSONArray jsonArray = jo.getJSONArray("content");
                             if (jsonArray.length() == 0) {
                                 Toast.makeText(getApplicationContext(), "No hay registros", Toast.LENGTH_SHORT).show();

@@ -49,9 +49,6 @@ public class ListaFotosAdapter extends ArrayAdapter<Bitmap> {
                     .load(values.get(position)) // Uri of the picture
                     .into(imagen);
 
-
-
-
         imagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

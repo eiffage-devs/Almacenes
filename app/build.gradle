@@ -6,8 +6,8 @@ android {
         applicationId 'com.eiffage.almacenes'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 13
-        versionName "2.0"
+        versionCode 14
+        versionName "2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

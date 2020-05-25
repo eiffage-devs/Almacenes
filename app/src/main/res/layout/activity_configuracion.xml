@@ -63,7 +63,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:text="Versión 2.0"
+        android:text="Versión 2.1"
         android:textColor="@android:color/white" />
 
 </RelativeLayout>

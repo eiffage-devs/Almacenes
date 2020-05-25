@@ -216,7 +216,7 @@ public class Menu extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        Log.d("RESP ULTIMA VERSION", response);
                         try {
                             JSONObject jo = new JSONObject(response);
                             String ultima = jo.getString("content");
