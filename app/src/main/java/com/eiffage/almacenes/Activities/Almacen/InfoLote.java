@@ -810,7 +810,7 @@ public class InfoLote extends AppCompatActivity {
 
         Intent getPictureIntent = new Intent(Intent.ACTION_PICK);
         getPictureIntent.setType("image/");
-        startActivityForResult(getPictureIntent, 2);
+        startActivityForResult(getPictureIntent, 1);
     }
 
     //
