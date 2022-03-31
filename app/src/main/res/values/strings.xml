@@ -63,6 +63,7 @@
     <string name="urlObtenerAlmacenes">https://inet.energia.eiffage.es:8002/api_endesa/obtenerAlmacenes</string>
     <string name="urlEnviarDatosLote">https://inet.energia.eiffage.es:8002/api_endesa/confirmarLote_v2</string>
     <string name="urlObtenerDescArtiulo">https://inet.energia.eiffage.es:8002/api_endesa/obtenerDescripcionMaterial</string>
+    <string name="urlObtenerDescArtiuloNavision">https://serviciontg.energia.eiffage.es/api/codeunits/wsAPP/DameDescripcionAlmacenENDESA</string>
     <string name="urlNecesitaLote">https://inet.energia.eiffage.es:8002/api_endesa/necesitaLote</string>
     <string name="urlRegistrarEntrada">https://inet.energia.eiffage.es:8002/api_endesa/registrarEntrada</string>
     <string name="urlRegistrarDevEmdesa">https://inet.energia.eiffage.es:8002/api_endesa/registrarDevEndesa</string>

@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -39,6 +40,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.eiffage.almacenes.Activities.General.ExpandableHeightListView;
 import com.eiffage.almacenes.Adapters.ListaFotosAdapter;
+import com.eiffage.almacenes.Objetos.Almacen;
+import com.eiffage.almacenes.Objetos.MySqliteOpenHelper;
 import com.eiffage.almacenes.R;
 
 import org.json.JSONException;
@@ -61,6 +64,7 @@ public class InfoLote extends AppCompatActivity {
     private String URL_CONFIRMAR_LOTE = "-";
     private String URL_ENVIAR_FOTO = "-";
     private String URL_DESCRIPCION_MATERIAL = "-";
+    private String URL_DESCRIPCION_MATERIAL_NAVISION = "-";
 
     String cod_lote, num_serie, token, mCurrentPhotoPath;
     boolean esBobina;
@@ -101,6 +105,7 @@ public class InfoLote extends AppCompatActivity {
         URL_CONFIRMAR_LOTE = getResources().getString(R.string.urlEnviarDatosLote);
         URL_ENVIAR_FOTO = getResources().getString(R.string.urlEnviarFoto);
         URL_DESCRIPCION_MATERIAL = getResources().getString(R.string.urlObtenerDescArtiulo);
+        URL_DESCRIPCION_MATERIAL_NAVISION = getResources().getString(R.string.urlObtenerDescArtiuloNavision);
 
         Intent i = getIntent();
         cod_lote = i.getStringExtra("cod_lote");
@@ -139,7 +144,7 @@ public class InfoLote extends AppCompatActivity {
                 if (!hasFocus) {
                     // code to execute when EditText loses focus
                     if(codigoCable.getText().toString().length() == 6){
-                        obtenerDescArticulo();
+                        obtenerDescArticuloNavision();
                     }
                     else
                         descripcionCable.setText("");
@@ -929,7 +934,7 @@ public class InfoLote extends AppCompatActivity {
                 //
                 if(data.getStringExtra("codigo").length() == 6){
                     codigoCable.setText(data.getStringExtra("codigo"));
-                    obtenerDescArticulo();
+                    obtenerDescArticuloNavision();
                 }
 
                 //
@@ -1010,6 +1015,86 @@ public class InfoLote extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("codigo", codigoCable.getText().toString());
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    public void obtenerDescArticuloNavision(){ //Filtra si el Almacen esta bloqueado
+        muestraLoader("Obteniendo información del artículo...");
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DESCRIPCION_MATERIAL_NAVISION,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        Log.d("Info material", response);
+                        JSONObject  jo = null;
+
+                        try {
+                            jo = new JSONObject(response);
+                            String res = jo.getString("content");
+                            boolean error = jo.getBoolean("error");
+
+                            if(!error){
+                                if(res.contains("ERROR")){
+                                    codigoCable.setText("");
+                                    Toast.makeText(InfoLote.this, res, Toast.LENGTH_SHORT).show();
+                                }else{
+                                    if(res.isEmpty()){
+                                        codigoCable.setText("");
+                                        Toast.makeText(InfoLote.this, "El almacén no es correcto", Toast.LENGTH_SHORT).show();
+                                    }else
+                                        descripcionCable.setText(res);
+                                }
+                            }else{
+                                codigoCable.setText("");
+                                Toast.makeText(InfoLote.this, "Se produjo un error al obtener la descripcion del artículo", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            progressDialog.dismiss();
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error info material", error.toString());
+                progressDialog.dismiss();
+                Toast.makeText(InfoLote.this, "No se ha podido recuperar la información del material", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                // params.put("Content-Type", "application/json");
+                //params.put("Authorization", "Bearer " + token);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                String almacen = "-";
+                try {
+                    MySqliteOpenHelper mySqliteOpenHelper = new MySqliteOpenHelper(InfoLote.this);
+                    SQLiteDatabase db = mySqliteOpenHelper.getWritableDatabase();
+                    almacen = mySqliteOpenHelper.getElegido(db).getAlmacen();
+                }catch (Exception e){}
+
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("usuarioApp", "eiffGest");
+                params.put("passwordApp", "U6ObJm9iwHWjYxL");
+                params.put("empresa", "Eiffage Energía, S.L.U.");
+                params.put("producto", codigoCable.getText().toString());
+                params.put("almacen", almacen);
+
+                Log.d("PARAMS GET DESC =>", params.toString());
+
                 return params;
             }
         };
