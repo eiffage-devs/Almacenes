@@ -44,6 +44,7 @@ public class Menu extends AppCompatActivity {
 
     TextView nombreAlmacen;
     String token;
+    String usuario,empresa,cod_recurso,versionApp;
 
     MySqliteOpenHelper mySqliteOpenHelper;
     SQLiteDatabase db;
@@ -73,6 +74,7 @@ public class Menu extends AppCompatActivity {
                                 dialog.cancel();
                                 SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
                                 editor.putString("token", "Sin valor");
+                                editor.putString("usuario", "-");
                                 editor.putString("cod_recurso", "-");
                                 editor.putString("delegacion", "-");
                                 editor.putString("nombre", "-");
@@ -118,18 +120,25 @@ public class Menu extends AppCompatActivity {
 
         SharedPreferences myPrefs = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         token = myPrefs.getString("token", "Sin valor");
+        usuario = myPrefs.getString("usuario", "-");
+        empresa = myPrefs.getString("empresa", "-");
+        cod_recurso = myPrefs.getString("cod_recurso", "-");
+
         actualizarAlmacen();
 
         try{
             PackageInfo packageInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             int buildVersion = packageInfo.versionCode;
+            versionApp = packageInfo.versionName + "(" + buildVersion + ")" ;
             pedirUltimaVersion("" + buildVersion);
             Log.d("Version code", buildVersion + "");
         }catch (PackageManager.NameNotFoundException e){
             e.printStackTrace();
         }
 
+        insertarMetrica("Acceso", String.valueOf(nombreAlmacen.getText()));
     }
+
 
     public void almaceneros(View view){
         Intent intent = new Intent(Menu.this, OpcionesAlmacenero.class);
@@ -268,4 +277,50 @@ public class Menu extends AppCompatActivity {
         stringRequest.setRetryPolicy((new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)));
 
     }
+
+    public void insertarMetrica(final String tipo, final String subtipo){
+
+        String URL_BASE = "https://serviciontg.energia.eiffage.es/";
+        String URL_INSERTAR_METRICA = "api/codeunits/wsgestion/InsertarMetrica";
+
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url = URL_BASE + URL_INSERTAR_METRICA;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("metrica resp", response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("metrica err", error.networkResponse + "");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("usuarioApp", "eiffGest");
+                params.put("passwordApp", "U6ObJm9iwHWjYxL");
+                params.put("empresa", empresa);
+                params.put("usuario", cod_recurso);
+                params.put("tipo", tipo);
+                params.put("subtipo", subtipo);
+                params.put("so", "android");
+                params.put("version", versionApp);
+                params.put("aplicacion", "almacenes");
+
+                Log.d("metrica", params.toString());
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
 }

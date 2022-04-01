@@ -103,12 +103,13 @@ public class Login extends AppCompatActivity {
                             //Guardamos el token en Shared Preferences
                             SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
                             editor.putString("token", token);
+                            //editor.putString("usuario", usuario);
                             editor.apply();
                             Intent i = new Intent(Login.this, Menu.class);
                             startActivity(i);
                             finish();
                             //Recuperamos el resto de datos del usuario
-                            //recuperarUsuario(token);
+                            recuperarUsuario(token);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -155,6 +156,15 @@ public class Login extends AppCompatActivity {
                             String nombre=job.getString("nombre");
                             String delegacion=job.getString("delegacion");
                             String cod_recurso=job.getString("cod_recurso");
+                            SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
+                            editor.putString("email", email);
+                            String[] split = email.split("@");
+                            editor.putString("usuario", split[0]);
+                            editor.putString("empresa",empresa);
+                            editor.putString("nombre",nombre);
+                            editor.putString("delegacion",delegacion);
+                            editor.putString("cod_recurso",cod_recurso);
+                            editor.apply();
                             //nuevoUsuario[0] = new Usuario(token, email, empresa, nombre, delegacion, cod_recurso);
                             //Enviar a la siguiente pantalla
                             Intent intent = new Intent(Login.this, Menu.class);
