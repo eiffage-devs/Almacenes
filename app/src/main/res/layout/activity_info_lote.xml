@@ -456,7 +456,7 @@
             android:backgroundTint="@android:color/white"
             android:ems="10"
             android:hint="Ejemplo: 300"
-            android:inputType="numberDecimal"
+            android:inputType="number"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textColorHint="#FFB5B4B4"
