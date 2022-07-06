@@ -69,6 +69,8 @@
     <string name="urlRegistrarDevEmdesa">https://inet.energia.eiffage.es:8002/api_endesa/registrarDevEndesa</string>
     <string name="urlRegistrarSalidaAlmacen">https://inet.energia.eiffage.es:8002/api_endesa/registrarSalidaAlmacen</string>
     <string name="urlRegistrarSalidaObra">https://inet.energia.eiffage.es:8002/api_endesa/registrarSalidaObra_v2</string>
+    <string name="urlInsMovSalidaObraENDESA">https://serviciontg.energia.eiffage.es/api/codeunits/wsAPP/InsMovSalidaObraENDESA</string>
+    <string name="urlInsMovReservaObraENDESA">https://serviciontg.energia.eiffage.es/api/codeunits/wsAPP/InsMovReservaObraENDESA</string>
     <string name="urlRegistrarDevObra">https://inet.energia.eiffage.es:8002/api_endesa/registrarDevObra_v2</string>
     <string name="urlObtenerCodigoArticulo">https://inet.energia.eiffage.es:8002/api_endesa/obtenerCodigoArticulo</string>
 

@@ -10,7 +10,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="70dp" />
+        android:layout_height="30dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -23,11 +23,10 @@
 
     <RadioGroup
         android:id="@+id/rg"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:orientation="horizontal"
-        android:padding="20dp">
+        android:layout_gravity="center_horizontal">
 
         <RadioButton
             android:id="@+id/optOT"
@@ -35,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
+            android:layout_marginRight="30dp"
             android:text="OT"
             android:textColor="@android:color/white" />
 
@@ -68,6 +68,17 @@
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
         android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/tecnicoEndesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:hint="Técnico Endesa"
+        android:inputType="text"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnOTIncidencia"

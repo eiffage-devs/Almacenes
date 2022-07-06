@@ -93,6 +93,10 @@ public class CreaLineas extends AppCompatActivity {
     //Utilizamos las mismas variables String que en las salidas a obra
     private String urlDevolucionesObra = "-";
 
+    //---------Reservas para obra------------
+    String tecnicoEndesa;
+    private String urlReservaObra = "-";
+
     //
     //      Método para usar flecha de atrás en Action Bar
     //
@@ -113,9 +117,12 @@ public class CreaLineas extends AppCompatActivity {
         URL_NECESITA_LOTE = getResources().getString(R.string.urlNecesitaLote);
         urlEntradas = getResources().getString(R.string.urlRegistrarEntrada);
         urlDevolucionesEndesa = getResources().getString(R.string.urlRegistrarDevEmdesa);
-        urlSalidasAlmacen = getResources().getString(R.string.urlRegistrarSalidaAlmacen);
+        //urlSalidasAlmacen = getResources().getString(R.string.urlRegistrarSalidaAlmacen);
         urlSalidasObra = getResources().getString(R.string.urlRegistrarSalidaObra);
         urlDevolucionesObra = getResources().getString(R.string.urlRegistrarDevObra);
+
+        urlSalidasObra = getResources().getString(R.string.urlInsMovSalidaObraENDESA);
+        urlReservaObra = getResources().getString(R.string.urlInsMovReservaObraENDESA);
 
         //
         //      Pedir permisos de cámara para poder escanear
@@ -201,6 +208,20 @@ public class CreaLineas extends AppCompatActivity {
                 else {
                     infoAdicional.setText("OT origen:\n" + otElegida);
                 }
+                break;
+            case "RESERVA PARA OBRA":
+                tipoR.setText("Tipo de registro:\nRESERVA PARA OBRA");
+                otElegida = i.getStringExtra("otElegida");
+                incidenciaElegida = i.getStringExtra("incidenciaElegida");
+                ticketSCM = i.getStringExtra("ticketSCM");
+                tecnicoEndesa = i.getStringExtra("tecnicoEndesa");
+                if(otElegida.equals("-")){
+                    infoAdicional.setText("Incidencia:\n" + incidenciaElegida);
+                }
+                else {
+                    infoAdicional.setText("OT destino:\n" + otElegida);
+                }
+
                 break;
         }
 
@@ -584,15 +605,29 @@ public class CreaLineas extends AppCompatActivity {
                 break;
             case "SALIDA A OBRA":
                 urlFinal = urlSalidasObra;
-                parametros.put("ot", otElegida);
-                parametros.put("incidencia", incidenciaElegida);
-                parametros.put("ticketSCM", ticketSCM);
+                params.put("usuarioApp", "eiffGest");
+                params.put("passwordApp", "U6ObJm9iwHWjYxL");
+                params.put("empresa", "Eiffage Energía, S.L.U.");
+                parametros.put("pOt", otElegida);
+                parametros.put("pIncidencia", incidenciaElegida);
+                parametros.put("pTicket", ticketSCM);
                 break;
             case "DEVOLUCIÓN DE OBRA":
                 urlFinal = urlDevolucionesObra;
                 parametros.put("ot", otElegida);
                 parametros.put("incidencia", incidenciaElegida);
                 parametros.put("ticketSCM", ticketSCM);
+                break;
+            case "RESERVA PARA OBRA":
+                urlFinal = urlReservaObra;
+                params.put("usuarioApp", "eiffGest");
+                params.put("passwordApp", "U6ObJm9iwHWjYxL");
+                params.put("empresa", "Eiffage Energía, S.L.U.");
+
+                parametros.put("pOt", otElegida);
+                parametros.put("pIncidencia", incidenciaElegida);
+                parametros.put("pTicket", ticketSCM);
+                parametros.put("pJefeObra", tecnicoEndesa);
                 break;
         }
 

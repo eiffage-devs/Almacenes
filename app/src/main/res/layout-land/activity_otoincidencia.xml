@@ -9,6 +9,7 @@
     tools:context=".Activities.General.OTOIncidencia">
 
     <TextView
+        android:id="@+id/titulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
@@ -21,7 +22,7 @@
         android:id="@+id/rg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/incidencia"
+        android:layout_below="@+id/titulo"
         android:layout_alignParentStart="true"
         android:orientation="horizontal"
         android:padding="20dp">
@@ -43,41 +44,58 @@
             android:textColor="@android:color/white" />
     </RadioGroup>
 
-    <EditText
-        android:id="@+id/incidencia"
-        android:layout_width="289dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="false"
-        android:layout_marginBottom="64dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="Introduce el nº de incidencia"
-        android:inputType="text"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white" />
-
-    <EditText
-        android:id="@+id/ticketSCM"
-        android:layout_width="262dp"
-        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_below="@+id/rg"
-        android:layout_marginLeft="20dp"
+        android:layout_above="@+id/btnOTIncidencia"
         android:layout_marginRight="20dp"
-        android:layout_marginStart="-20dp"
-        android:layout_toEndOf="@+id/incidencia"
-        android:hint="Ticket SCM"
-        android:inputType="number"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
-        android:visibility="visible" />
+        android:layout_marginLeft="20dp">
+
+        <EditText
+            android:id="@+id/incidencia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="33"
+            android:hint="Introduce el nº de incidencia"
+            android:inputType="text"
+            android:layout_marginRight="15dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
+
+
+        <EditText
+            android:id="@+id/ticketSCM"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="33"
+            android:hint="Ticket SCM"
+            android:inputType="number"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:visibility="visible" />
+
+        <EditText
+            android:id="@+id/tecnicoEndesa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="33"
+            android:layout_marginLeft="15dp"
+            android:hint="Técnico Endesa"
+            android:inputType="number"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:visibility="gone" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btnOTIncidencia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:background="@color/azulBootstrap"
         android:onClick="continuar"
         android:text="Buscar OT"

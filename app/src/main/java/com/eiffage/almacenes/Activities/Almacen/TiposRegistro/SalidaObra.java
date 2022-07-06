@@ -57,7 +57,7 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
     String almacen, filtro;
     ArrayList<OT> ots;
 
-    String tipoRegistro, ticketSCM;
+    String tipoRegistro, ticketSCM, tecnicoEndesa;
 
 
     //Método para usar flecha de atrás en Action Bar
@@ -97,6 +97,10 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
         tipoRegistro = i.getStringExtra("tipoRegistro");
         ticketSCM = i.getStringExtra("ticketSCM");
 
+        if(i.getStringExtra("tecnicoEndesa") != null){
+            tecnicoEndesa = i.getStringExtra("tecnicoEndesa");
+        }
+
         listaOTs = findViewById(R.id.listaOT);
         listaOTs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -106,6 +110,8 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
                 intent.putExtra("otElegida", ots.get(position).getCodOT());
                 intent.putExtra("incidenciaElegida", "-");
                 intent.putExtra("ticketSCM", ticketSCM);
+                if(tipoRegistro.equals("RESERVA PARA OBRA"))
+                    intent.putExtra("tecnicoEndesa", tecnicoEndesa);
                 startActivity(intent);
             }
         });
@@ -270,6 +276,8 @@ public class SalidaObra extends AppCompatActivity implements SearchView.OnQueryT
                 intent.putExtra("otElegida", codOT);
                 intent.putExtra("incidenciaElegida", "-");
                 intent.putExtra("ticketSCM", ticketSCM);
+                if(tipoRegistro.equals("RESERVA PARA OBRA"))
+                    intent.putExtra("tecnicoEndesa", tecnicoEndesa);
                 startActivity(intent);
             }
         })

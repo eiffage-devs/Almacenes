@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
+        android:layout_above="@+id/button6"
         android:layout_alignParentStart="true"
         android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
@@ -74,9 +75,19 @@
             android:id="@+id/rbDevObra"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:text="Devolución de obra"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/reservaObra"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="Reserva para obra"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </RadioGroup>

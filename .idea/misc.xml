@@ -4,8 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.27447916666666666" />
+        <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout-land/activity_otoincidencia.xml" value="0.29635416666666664" />
+        <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout-land/activity_tipo_movimiento.xml" value="0.4484375" />
+        <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout-sw600dp/activity_otoincidencia.xml" value="0.275" />
+        <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout-sw600dp/activity_tipo_movimiento.xml" value="0.275" />
         <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout/activity_crea_lineas.xml" value="0.36666666666666664" />
+        <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout/activity_filtro_ot.xml" value="0.36666666666666664" />
         <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout/activity_info_lote.xml" value="0.36666666666666664" />
+        <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout/activity_otoincidencia.xml" value="0.36666666666666664" />
+        <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout/activity_salida_obra.xml" value="0.36666666666666664" />
+        <entry key="..\:/DirectorioTrabajoAndroid/StudioProjects/Almacenes/app/src/main/res/layout/activity_tipo_movimiento.xml" value="0.36666666666666664" />
         <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.12708333333333333" />
         <entry key="app/src/main/res/layout-sw600dp/activity_main.xml" value="0.16944444444444445" />
         <entry key="app/src/main/res/layout/activity_configuracion.xml" value="0.22592592592592592" />

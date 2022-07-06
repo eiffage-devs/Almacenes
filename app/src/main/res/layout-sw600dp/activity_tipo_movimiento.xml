@@ -77,6 +77,16 @@
             android:text="Devolución de obra"
             android:textColor="@android:color/white"
             android:textSize="24sp" />
+
+        <RadioButton
+            android:id="@+id/reservaObra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="Reserva para obra"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
     </RadioGroup>
 
     <Button

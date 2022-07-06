@@ -55,6 +55,10 @@ public class OpcionesAlmacenero extends AppCompatActivity {
                 index = 4;
                 dest = "com.eiffage.almacenes.Activities.General.OTOIncidencia";
                 break;
+            case R.id.reservaObra:
+                index = 5;
+                dest = "com.eiffage.almacenes.Activities.General.OTOIncidencia";
+                break;
         }
 
         if(index != -1){

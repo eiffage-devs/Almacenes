@@ -83,6 +83,23 @@
         android:textSize="24sp"
         android:visibility="visible" />
 
+    <EditText
+        android:id="@+id/tecnicoEndesa"
+        android:layout_width="404dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rg"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:hint="Técnico Endesa"
+        android:inputType="number"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="24sp"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/btnOTIncidencia"
         android:layout_width="match_parent"

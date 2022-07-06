@@ -19,7 +19,7 @@ public class OTOIncidencia extends AppCompatActivity {
 
     RadioButton incidencia, ot;
     RadioGroup group;
-    EditText numeroIncidencia, ticketSCM;
+    EditText numeroIncidencia, ticketSCM, tecnicoEndesa;
     String tipoRegistro;
 
     String destino, objetivo;
@@ -50,6 +50,8 @@ public class OTOIncidencia extends AppCompatActivity {
                 tipoRegistro = "SALIDA A OBRA";
             } else if (tipoReg.equals("Devolución de obra")) {
                 tipoRegistro = "DEVOLUCIÓN DE OBRA";
+            } else if (tipoReg.equals("Reserva para obra")) {
+                tipoRegistro = "RESERVA PARA OBRA";
             }
         }
 
@@ -59,9 +61,12 @@ public class OTOIncidencia extends AppCompatActivity {
 
         numeroIncidencia = findViewById(R.id.incidencia);
         ticketSCM = findViewById(R.id.ticketSCM);
+        tecnicoEndesa = findViewById(R.id.tecnicoEndesa);
         ot.setChecked(true);
         numeroIncidencia.setVisibility(View.INVISIBLE);
 
+        if(tipoRegistro.equals("RESERVA PARA OBRA"))
+            tecnicoEndesa.setVisibility(View.VISIBLE);
 
         group = findViewById(R.id.rg);
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -85,39 +90,94 @@ public class OTOIncidencia extends AppCompatActivity {
 
     public void continuar(View v) {
         if (ot.isChecked()) {
-            if (destino.equals("almacenero")) {
-                Intent i = new Intent(OTOIncidencia.this, SalidaObra.class);
-                i.putExtra("tipoRegistro", tipoRegistro);
-                String ticket = ticketSCM.getText().toString();
-                if(ticket.equals("")){
-                    i.putExtra("ticketSCM", "-");
-                }
-                else {
-                    i.putExtra("ticketSCM", ticket);
-                }
-                startActivity(i);
-            } else if (destino.equals("jefeobra")) {
-                Intent i = new Intent(OTOIncidencia.this, FiltroOT.class);
-                i.putExtra("objetivo", objetivo);
-                startActivity(i);
-            }
+            if(tipoRegistro.equals("RESERVA PARA OBRA")){
+                if(tecnicoEndesa.getText().toString().isEmpty()){
+                    tecnicoEndesa.requestFocus();
+                    tecnicoEndesa.setError("Campo necesario");
+                }else{
+                    tecnicoEndesa.setError(null);
 
+                    if (destino.equals("almacenero")) {
+                        Intent i = new Intent(OTOIncidencia.this, SalidaObra.class);
+                        i.putExtra("tipoRegistro", tipoRegistro);
+                        String ticket = ticketSCM.getText().toString();
+                        if(ticket.equals("")){
+                            i.putExtra("ticketSCM", "-");
+                        }
+                        else {
+                            i.putExtra("ticketSCM", ticket);
+                        }
+                        i.putExtra("tecnicoEndesa", tecnicoEndesa.getText().toString());
+                        startActivity(i);
+                    } else if (destino.equals("jefeobra")) {
+                        //JHM 06/07/2022 => Aqui no deberia entrar nunca => destino siempres es igual a almacenero
+                        Intent i = new Intent(OTOIncidencia.this, FiltroOT.class);
+                        i.putExtra("objetivo", objetivo);
+                        startActivity(i);
+                    }
+
+                }
+            }else {
+                if (destino.equals("almacenero")) {
+                    Intent i = new Intent(OTOIncidencia.this, SalidaObra.class);
+                    i.putExtra("tipoRegistro", tipoRegistro);
+                    String ticket = ticketSCM.getText().toString();
+                    if(ticket.equals("")){
+                        i.putExtra("ticketSCM", "-");
+                    }
+                    else {
+                        i.putExtra("ticketSCM", ticket);
+                    }
+
+                    startActivity(i);
+                } else if (destino.equals("jefeobra")) {
+                    //JHM 06/07/2022 => Aqui no deberia entrar nunca => destino siempres es igual a almacenero
+                    Intent i = new Intent(OTOIncidencia.this, FiltroOT.class);
+                    i.putExtra("objetivo", objetivo);
+                    startActivity(i);
+                }
+            }
         } else if (incidencia.isChecked()) {
             if (ticketSCM.getText().toString().length() < 1) {
                 ticketSCM.requestFocus();
                 ticketSCM.setError("Campo necesario");
             } else {
-                if (destino.equals("almacenero")) {
-                    Intent i = new Intent(OTOIncidencia.this, CreaLineas.class);
-                    i.putExtra("tipoRegistro", tipoRegistro);
-                    i.putExtra("incidenciaElegida", numeroIncidencia.getText().toString());
-                    i.putExtra("ticketSCM", ticketSCM.getText().toString());
-                    i.putExtra("otElegida", "-");
-                    startActivity(i);
-                } else if (destino.equals("jefeobra")) {
+                ticketSCM.setError(null);
+
+                if(tipoRegistro.equals("RESERVA PARA OBRA")){
+                    if(tecnicoEndesa.getText().toString().isEmpty()){
+                        tecnicoEndesa.requestFocus();
+                        tecnicoEndesa.setError("Campo necesario");
+                    }else{
+                        tecnicoEndesa.setError(null);
+                        if (destino.equals("almacenero")) {
+                            Intent i = new Intent(OTOIncidencia.this, CreaLineas.class);
+                            i.putExtra("tipoRegistro", tipoRegistro);
+                            i.putExtra("incidenciaElegida", numeroIncidencia.getText().toString());
+                            i.putExtra("ticketSCM", ticketSCM.getText().toString());
+                            i.putExtra("otElegida", "-");
+                            i.putExtra("tecnicoEndesa", tecnicoEndesa.getText().toString());
+                            startActivity(i);
+                        } else if (destino.equals("jefeobra")) {
+                            /*Intent i = new Intent(OTOIncidencia.this, FiltroOT.class);
+                            i.putExtra("objetivo", objetivo);
+                            startActivity(i);*/
+                        }
+                    }
+                }else{
+                    if (destino.equals("almacenero")) {
+                        Intent i = new Intent(OTOIncidencia.this, CreaLineas.class);
+                        i.putExtra("tipoRegistro", tipoRegistro);
+                        i.putExtra("incidenciaElegida", numeroIncidencia.getText().toString());
+                        i.putExtra("ticketSCM", ticketSCM.getText().toString());
+                        i.putExtra("otElegida", "-");
+
+                        startActivity(i);
+                    } else if (destino.equals("jefeobra")) {
                     /*Intent i = new Intent(OTOIncidencia.this, FiltroOT.class);
                     i.putExtra("objetivo", objetivo);
                     startActivity(i);*/
+                    }
                 }
             }
         } else {
