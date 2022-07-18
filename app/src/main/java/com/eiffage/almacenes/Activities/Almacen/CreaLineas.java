@@ -117,7 +117,7 @@ public class CreaLineas extends AppCompatActivity {
         URL_NECESITA_LOTE = getResources().getString(R.string.urlNecesitaLote);
         urlEntradas = getResources().getString(R.string.urlRegistrarEntrada);
         urlDevolucionesEndesa = getResources().getString(R.string.urlRegistrarDevEmdesa);
-        //urlSalidasAlmacen = getResources().getString(R.string.urlRegistrarSalidaAlmacen);
+        urlSalidasAlmacen = getResources().getString(R.string.urlRegistrarSalidaAlmacen);
         urlSalidasObra = getResources().getString(R.string.urlRegistrarSalidaObra);
         urlDevolucionesObra = getResources().getString(R.string.urlRegistrarDevObra);
 
@@ -630,7 +630,8 @@ public class CreaLineas extends AppCompatActivity {
                 parametros.put("pJefeObra", tecnicoEndesa);
                 break;
         }
-
+        Log.d("TIPO REGISTRO ===> ", tipoRegistro);
+        Log.d("URL FINAL ===> ", urlFinal);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlFinal,
                 new Response.Listener<String>() {
                     @Override
