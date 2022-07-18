@@ -230,7 +230,7 @@ public class Menu extends AppCompatActivity {
                             JSONObject jo = new JSONObject(response);
                             String ultima = jo.getString("content");
 
-                            if(!ultima.equals(local)){
+                            if(Integer.parseInt(local) < Integer.parseInt(ultima)){
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
                                 builder.setTitle("Actualización disponible")
                                         .setMessage("Hay una nueva versión disponible de la aplicación.\n\t¿Quieres actualizarla ahora?")
